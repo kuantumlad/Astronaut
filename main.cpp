@@ -4,7 +4,8 @@
 
 int main(){
 
-
+  ///////////////////////////////////////////
+  //LOAD IMAGE
   sf::Image imageIn;
   sf::Texture textureIn;
   
@@ -12,15 +13,18 @@ int main(){
     std::cout << ">> IMAGE LOADED" << std::endl;
   }
 
+  //////////////////////////////////////////
+  //APPLY IMAGE TO TEXTURE THEN SPRITE
   textureIn.loadFromImage(imageIn);
   sf::Sprite spriteIn;
   spriteIn.setTexture(textureIn,true);
   sf::Vector2u imageIn_size = imageIn.getSize();
 
-  std::cout << ">> IMAGE IN SIZE " << imageIn_size.x << " " << imageIn_size.y << std::endl;
+  //std::cout << ">> IMAGE IN SIZE " << imageIn_size.x << " " << imageIn_size.y << std::endl;
   double windowX = imageIn_size.x;
   double windowY = imageIn_size.y;
-  
+  ////////////////////////////////////////////////
+  //SET SIZE OF WINDOW TO THAT OF IMAGE DIMENSIONS
   sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Test");
 
   
