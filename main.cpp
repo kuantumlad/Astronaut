@@ -19,9 +19,7 @@ int main(){
   if( imageOriginal.loadFromFile("buzz.jpg") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
   }
-
-  
-
+ 
   //////////////////////////////////////////
   //APPLY IMAGE TO TEXTURE THEN SPRITE
   textureOg.loadFromImage(imageOriginal);
@@ -30,14 +28,15 @@ int main(){
 
   sf::Vector2u imageIn_size = imageIn.getSize();
 
-   //std::cout << ">> IMAGE IN SIZE " << imageIn_size.x << " " << imageIn_size.y << std::endl;
+  //std::cout << ">> IMAGE IN SIZE " << imageIn_size.x << " " << imageIn_size.y << std::endl;
   double windowX = imageIn_size.x;
   double windowY = imageIn_size.y;
   ////////////////////////////////////////////////
   //SET SIZE OF WINDOW TO THAT OF IMAGE DIMENSIONS
   sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Test");
   sf::RenderWindow window2(sf::VideoMode(windowX,windowY,32),"Original");
-
+  sf::RenderWindow window3(sf::VideoMode(800,800,32),"Rendered");  
+  
   /////////////////////////////////////////////////  
   //MANIPULATE IMAGE HERE
   for( int i = 0; i < imageIn_size.x; i++){
@@ -63,12 +62,34 @@ int main(){
     }
   }
 
+
   textureIn.loadFromImage(imageIn);
   sf::Sprite spriteIn;
   spriteIn.setTexture(textureIn,true);
+  ///////////////////////////////////////////////////
+  //DRAW TRIANGLES
+  sf::VertexArray va(sf::Triangles,3);
+  //va[0].position = (sfvec);
+  //va[0].color = sfcolor
+  sf::Vector2f pos_0(0, 0);
+  sf::Vector2f pos_1(200, 0);
+  sf::Vector2f pos_2(100, 100);
+
+  sf::Color col_0(100,100,100);
+  sf::Color col_1(200,200,200);
+  sf::Color col_2(50,50,50);
+
+  va[0].position = pos_0;
+  va[1].position = pos_1;
+  va[2].position = pos_2;
+
+  va[0].color = col_0;
+  va[1].color = col_1;
+  va[2].color = col_2;
+
 
   ////////////////////////////////////////////////////////
-  //DISPLAY BOTH ORIGINAL AND EDITED IMAGE
+  //DISPLAY BOTH ORIGINAL AND EDITED IMAGE  
   while (window2.isOpen() ){
     sf::Event event;
     while( window2.pollEvent(event) ){
@@ -82,6 +103,12 @@ int main(){
       window.clear(sf::Color::Black);
       window.draw(spriteIn);
       window.display();
+
+      
+      window3.clear(sf::Color::Black);
+      window3.draw(va);
+      window3.display();
+
     }
   }
 
