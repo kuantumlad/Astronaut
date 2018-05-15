@@ -1,0 +1,29 @@
+#ifndef polygons_hh
+#define polygons_hh
+
+#include <vector>
+#include <SFML/Graphics.hpp>
+
+class Polygons{
+
+
+public:
+  
+  Polygons();
+  ~Polygons();
+
+  Polygons(std::vector<double> temp_pos, std::vector<int> temp_color, int vertices );
+  
+  std::vector<double> vertex_pos;
+  std::vector<int> vertex_col;
+
+  sf::VertexArray *vertex_array;
+  
+  void setPolygonsColor( std::vector<int> );
+  void setPolygonsPosition( std::vector<double> );
+  std::vector<double> getPolygonsPosition();
+  std::vector<int> getPolygonsColor();
+  
+  
+};
+#endif

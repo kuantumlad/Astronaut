@@ -1,0 +1,51 @@
+#include "Polygons.hh"
+#include <vector>
+#include <iostream>
+
+
+Polygons::Polygons(){
+
+}
+
+
+Polygons::~Polygons(){
+
+}
+
+
+Polygons::Polygons(std::vector<double> pos, std::vector<int> col, int vertices ){
+
+  vertex_pos = pos;
+  vertex_col = col;
+  vertex_array = new sf::VertexArray(sf::Triangles,vertices);
+
+}
+
+
+
+void Polygons::setPolygonsColor( std::vector<int> col ){
+
+  vertex_col = col;
+  
+}
+
+
+void Polygons::setPolygonsPosition( std::vector<double> pos ){
+
+  vertex_pos = pos;
+  
+}
+
+
+std::vector<double> Polygons::getPolygonsPosition(){
+
+  return vertex_pos;
+
+}
+
+std::vector<int> Polygons::getPolygonsColor(){
+
+  return vertex_col;
+
+}
+

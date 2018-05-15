@@ -3,8 +3,16 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h> 
+
+
+#include "Polygons.hh"
 
 int main(){
+
+  srand(time(NULL));
+  
 
   ///////////////////////////////////////////
   //LOAD IMAGE
@@ -31,11 +39,13 @@ int main(){
   //std::cout << ">> IMAGE IN SIZE " << imageIn_size.x << " " << imageIn_size.y << std::endl;
   double windowX = imageIn_size.x;
   double windowY = imageIn_size.y;
+  double rendX = 800;
+  double rendY = 800;
   ////////////////////////////////////////////////
   //SET SIZE OF WINDOW TO THAT OF IMAGE DIMENSIONS
   sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Test");
   sf::RenderWindow window2(sf::VideoMode(windowX,windowY,32),"Original");
-  sf::RenderWindow window3(sf::VideoMode(800,800,32),"Rendered");  
+  sf::RenderWindow window3(sf::VideoMode(rendX,rendY,32),"Rendered");  
   
   /////////////////////////////////////////////////  
   //MANIPULATE IMAGE HERE
@@ -66,26 +76,49 @@ int main(){
   textureIn.loadFromImage(imageIn);
   sf::Sprite spriteIn;
   spriteIn.setTexture(textureIn,true);
-  ///////////////////////////////////////////////////
-  //DRAW TRIANGLES
-  sf::VertexArray va(sf::Triangles,3);
-  //va[0].position = (sfvec);
-  //va[0].color = sfcolor
-  sf::Vector2f pos_0(0, 0);
-  sf::Vector2f pos_1(200, 0);
-  sf::Vector2f pos_2(100, 100);
 
-  sf::Color col_0(100,100,100);
-  sf::Color col_1(200,200,200);
-  sf::Color col_2(50,50,50);
+  std::vector<sf::VertexArray*> triangles;
+  std::vector<Polygons *> polys;
+  /* generate secret number between 1 and 10: */
 
-  va[0].position = pos_0;
-  va[1].position = pos_1;
-  va[2].position = pos_2;
+  double x = 0.0;
+  double y = 0.0;
+  double alpha = 0.0;
+  
+  int n_triangles = 100;
+  std::vector<sf::Vector2f> pos;
+  std::vector<sf::Color> col;
+  for( int i = 0; i < n_triangles; i++ ){
+    x = rand() % (int)rendX;
+    y = rand() % (int)rendX;
+    sf::Vector2f pos_0(x, y);
+    x = rand() % (int)rendX;
+    y = rand() % (int)rendX;
+    sf::Vector2f pos_1(x, y);
+    x = rand() % (int)rendX;
+    y = rand() % (int)rendX;
+    sf::Vector2f pos_2(x, y);
 
-  va[0].color = col_0;
-  va[1].color = col_1;
-  va[2].color = col_2;
+    alpha = rand() % 255;
+    sf::Color col_0(10,100,200,alpha);
+    alpha = rand() % 255;
+    sf::Color col_1(200,200,200,alpha);
+    alpha = rand() % 255;
+    sf::Color col_2(50,50,50,alpha);
+
+    pos.push_back(pos_0);
+    pos.push_back(pos_1);
+    pos.push_back(pos_2);
+
+    col.push_back(col_0);
+    col.push_back(col_1);
+    col.push_back(col_2);
+    polys.push_back( new Polygons( pos, col, 3 ) );
+
+    pos.clear();
+    col.clear();
+  }
+
 
 
   ////////////////////////////////////////////////////////
@@ -106,16 +139,15 @@ int main(){
 
       
       window3.clear(sf::Color::Black);
-      window3.draw(va);
+      for( int i = 0; i < polys.size(); i++ ){
+	window3.draw( polys[i]->vertex_array );     
+      }
+
       window3.display();
 
+      
     }
   }
-
-
   
-
-  
-
   return 0;
 }
