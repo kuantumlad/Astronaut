@@ -39,43 +39,21 @@ int main(){
   //std::cout << ">> IMAGE IN SIZE " << imageIn_size.x << " " << imageIn_size.y << std::endl;
   double windowX = imageIn_size.x;
   double windowY = imageIn_size.y;
-  double rendX = 800;
-  double rendY = 800;
+  double rendX = windowY;
+  double rendY = windowX;
+
+  sf::VideoMode desktop = sf::VideoMode::getDesktopMode();;  
+  int global_X = desktop.width/2 - rendX;
+  int global_Y = desktop.height/2 - rendY;
+  
+  sf::Vector2i window_pos(global_X, global_Y);
+  sf::Vector2i window3_pos(global_X + rendX, global_Y);
   ////////////////////////////////////////////////
   //SET SIZE OF WINDOW TO THAT OF IMAGE DIMENSIONS
-  sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Test");
-  sf::RenderWindow window2(sf::VideoMode(windowX,windowY,32),"Original");
-  sf::RenderWindow window3(sf::VideoMode(rendX,rendY,32),"Rendered");  
-  
-  /////////////////////////////////////////////////  
-  //MANIPULATE IMAGE HERE
-  for( int i = 0; i < imageIn_size.x; i++){
-    for( int j = 0; j < imageIn_size.y; j++ ){
-      sf::Color pixel = imageIn.getPixel(i,j);
-      int red = (int)pixel.r * 1;
-      int blue = (int)pixel.b * 1;
-      int green = (int)pixel.g * 1;
-      
-      int alpha = (int)pixel.a * 1;
-      //int avg = (int)( (red + blue + green)/3 ); //GRAYSCALE
-      std::vector<int> v_clr{red,blue,green}; //LIGHTNESS
-      int mx_clr = *std::max_element(v_clr.begin(), v_clr.end());
-      int mn_clr = *std::min_element(v_clr.begin(), v_clr.end());
-      //int avg = (mx_clr + mn_clr)/2;
-      //int avg = (int)( (red*0.72 + blue*0.07 + green*0.21)/3); //LUMINOSITY
-      //int avg = mx_clr; //DECOMPOSING
-      int avg = blue;
-      //sf::Color new_pixel = sf::Color(sf::Color((sf::Uint8)red,(sf::Uint8)blue,(sf::Uint8)green,(sf::Uint8)alpha));
-      sf::Color new_pixel = sf::Color(sf::Color((sf::Uint8)avg,(sf::Uint8)avg,(sf::Uint8)avg,(sf::Uint8)alpha));
-      
-      imageIn.setPixel(i,j,new_pixel);
-    }
-  }
-
-
-  textureIn.loadFromImage(imageIn);
-  sf::Sprite spriteIn;
-  spriteIn.setTexture(textureIn,true);
+  sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Original");
+  sf::RenderWindow window3(sf::VideoMode(windowX,windowY,32),"Rendered");  
+  window.setPosition(window_pos);
+  window3.setPosition(window3_pos);
 
   std::vector<sf::VertexArray*> triangles;
   std::vector<Polygons *> polys;
@@ -119,33 +97,67 @@ int main(){
     col.clear();
   }
 
+  ////////////////////////////////////////////////////////////////////////////
+  //CALCULATE THE LOSS
+  sf::Vector2u windowSize = window3.getSize();
+  sf::Texture texture;
+  texture.create(windowSize.x, windowSize.y);
+  texture.update(window3);
+  sf::Image screenshot = texture.copyToImage();
 
+  
+  double temploss = 0;
+  for( int i = 0; i < windowSize.x; i++ ){
+    for( int j = 0; j < windowSize.y; j++ ){
+      sf::Color screenshot_pixel = screenshot.getPixel(i,j);
+      sf::Color original_pixel = imageIn.getPixel(i,j);
 
+      int red = (int)screenshot_pixel.r;
+      int blue = (int)screenshot_pixel.b;
+      int green = (int)screenshot_pixel.g;      
+      int alpha = (int)screenshot_pixel.a;
+
+      int og_red = (int)original_pixel.r;
+      int og_blue = (int)original_pixel.b;
+      int og_green = (int)original_pixel.g;      
+      int og_alpha = (int)original_pixel.a;
+
+      int delta_red = pow( red - og_red, 2);
+      int delta_blue = pow( blue - og_blue, 2);
+      int delta_green = pow( green - og_green, 2);
+      int delta_alpha = pow( alpha - og_alpha, 2);
+      double pixel_chi = (delta_red + delta_blue + delta_green + delta_alpha)/(256.0*256.0*16.0);
+      
+      temploss = temploss + pixel_chi;
+      //std::cout << " >> " << temploss << std::endl;
+    }
+  }
+  ////////////////////////////////////////////////////////////////////////////
+
+  
   ////////////////////////////////////////////////////////
   //DISPLAY BOTH ORIGINAL AND EDITED IMAGE  
-  while (window2.isOpen() ){
+  while (window.isOpen() ){
     sf::Event event;
-    while( window2.pollEvent(event) ){
-      if(event.type == sf::Event::Closed){
-	window2.close();
+    while( window.pollEvent(event) ){
+      if(event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) ){
+	window.close();
+	window3.close();
       }
-      window2.clear(sf::Color::Black);
-      window2.draw(spriteOg);
-      window2.display();
-
       window.clear(sf::Color::Black);
-      window.draw(spriteIn);
+      window.draw(spriteOg);
       window.display();
-
+    
       
       window3.clear(sf::Color::Black);
       for( int i = 0; i < polys.size(); i++ ){
 	window3.draw( polys[i]->vertex_array );     
       }
-
       window3.display();
 
+
       
+   
     }
   }
   
