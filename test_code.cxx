@@ -5,9 +5,10 @@
       sf::Color pixel = imageIn.getPixel(i,j);
       int red = (int)pixel.r * 1;
       int blue = (int)pixel.b * 1;
-      int green = (int)pixel.g * 1;
-      
+      int green = (int)pixel.g * 1;      
       int alpha = (int)pixel.a * 1;
+
+      
       //int avg = (int)( (red + blue + green)/3 ); //GRAYSCALE
       std::vector<int> v_clr{red,blue,green}; //LIGHTNESS
       int mx_clr = *std::max_element(v_clr.begin(), v_clr.end());

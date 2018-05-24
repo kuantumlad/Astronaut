@@ -1,0 +1,26 @@
+#include "PolygonManager.hh"
+
+
+#include <vector>
+#include <iostream>
+
+
+PolygonManager::PolygonManager(){
+
+
+
+}
+
+
+PolygonManager::~PolygonManager(){
+
+
+}
+
+
+double PolygonManager::getLoss(){
+
+
+  return 0.0;
+
+}

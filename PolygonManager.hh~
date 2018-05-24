@@ -1,0 +1,17 @@
+#ifndef polygonmanager_hh
+#define polygonmanager_hh
+
+
+class PolygonManager{
+
+public:
+  PolygonManager();
+  ~PolygonManager();
+
+
+public:
+  double getLoss();
+
+
+};
+#endif

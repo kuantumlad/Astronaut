@@ -6,14 +6,13 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h> 
 
-
 #include "Polygons.hh"
+#include "Wiggler.hh"
 
 int main(){
 
   srand(time(NULL));
   
-
   ///////////////////////////////////////////
   //LOAD IMAGE
   sf::Image imageIn;
@@ -57,6 +56,9 @@ int main(){
 
   std::vector<sf::VertexArray*> triangles;
   std::vector<Polygons *> polys;
+
+  Wiggler wiggle;
+  
   /* generate secret number between 1 and 10: */
 
   double x = 0.0;
@@ -104,7 +106,6 @@ int main(){
   texture.create(windowSize.x, windowSize.y);
   texture.update(window3);
   sf::Image screenshot = texture.copyToImage();
-
   
   double temploss = 0;
   for( int i = 0; i < windowSize.x; i++ ){
@@ -134,6 +135,10 @@ int main(){
   }
   ////////////////////////////////////////////////////////////////////////////
 
+
+  
+
+  
   
   ////////////////////////////////////////////////////////
   //DISPLAY BOTH ORIGINAL AND EDITED IMAGE  
@@ -156,6 +161,18 @@ int main(){
       window3.display();
 
 
+      for( int i = 0; i < polys.size(); i++ ){
+	std::vector<sf::Vector2f> temp_poly_pos = polys[i]->getPolygonsPosition();
+	wiggle.WigglePosition( (temp_poly_pos[0]) );
+	polys[i]->setPolygonsPosition(temp_poly_pos);
+
+	std::vector<sf::Color> temp_poly_col = polys[i]->getPolygonsColor();
+ 	wiggle.WiggleColor( (temp_poly_col[0]) );
+	polys[i]->setPolygonsColor(temp_poly_col);
+	
+
+
+      }
       
    
     }
@@ -163,3 +180,5 @@ int main(){
   
   return 0;
 }
+
+
