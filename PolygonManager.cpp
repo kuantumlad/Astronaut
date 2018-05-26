@@ -1,5 +1,6 @@
 #include "PolygonManager.hh"
 
+#include <SFML/Graphics.hpp>
 
 #include <vector>
 #include <iostream>
@@ -19,12 +20,23 @@ PolygonManager::~PolygonManager(){
 
 void PolygonManager::captureOriginal(sf::Image temp_org_image ){
 
-  windowSize = temp_org_image.getSize();
+  //windowSize = temp_org_image.getSize();
 
 }
 
 
-double PolygonManager::getLoss(){
+sf::Image getScreenshot( sf::RenderWindow *window ){
+
+  // sf::Texture texture;
+  // texture.create(window.getSize().x, window.getSize().y);
+  //texture.update(window);
+  sf::Image screenshot = window->capture(); ///texture.copyToImage();
+
+  return screenshot;
+}
+
+
+double PolygonManager::getLoss(sf::Image screenshot, sf::Image imageIn){
 
   double temploss = 0;
   for( int i = 0; i < windowSize.x; i++ ){
@@ -53,17 +65,7 @@ double PolygonManager::getLoss(){
     }
   }
 
-  return temp_loss;
-
-}
-
-void PolygonManager::captureScreen(sf::Texture temp_texture){
-
-  sf::Texture texture;
-  texture.create(windowSize.x, windowSize.y);
-  texture.update(window3);
-  sf::Image screenshot = texture.copyToImage();
-
+  return temploss;
 
 }
 

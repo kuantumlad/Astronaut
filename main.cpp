@@ -7,6 +7,7 @@
 #include <time.h> 
 
 #include "Polygons.hh"
+#include "PolygonManager.hh"
 #include "Wiggler.hh"
 
 int main(){
@@ -58,6 +59,7 @@ int main(){
   std::vector<Polygons *> polys;
 
   Wiggler wiggle;
+  PolygonManager poly_manager;
   
   /* generate secret number between 1 and 10: */
 
@@ -142,6 +144,8 @@ int main(){
   
   ////////////////////////////////////////////////////////
   //DISPLAY BOTH ORIGINAL AND EDITED IMAGE  
+
+  std::vector<  std::vector<Polygons *> > img_config;
   while (window.isOpen() ){
     sf::Event event;
     while( window.pollEvent(event) ){
@@ -149,33 +153,42 @@ int main(){
 	window.close();
 	window3.close();
       }
+    }
       window.clear(sf::Color::Black);
       window.draw(spriteOg);
       window.display();
     
       
       window3.clear(sf::Color::Black);
-      for( int i = 0; i < polys.size(); i++ ){
+       for( int i = 0; i < polys.size(); i++ ){
 	window3.draw( polys[i]->vertex_array );     
       }
+     
       window3.display();
 
+      //CHOOSE POLYGON TO CHANGE
+      int poly_to_change = rand() % polys.size();
+      int vertex_to_change = rand() % 3;
 
-      for( int i = 0; i < polys.size(); i++ ){
-	std::vector<sf::Vector2f> temp_poly_pos = polys[i]->getPolygonsPosition();
-	wiggle.WigglePosition( (temp_poly_pos[0]) );
-	polys[i]->setPolygonsPosition(temp_poly_pos);
+      //std::cout<< " >> CHANGING POLYGON " << poly_to_change << " VERTEX " << vertex_to_change <<std::endl;
 
-	std::vector<sf::Color> temp_poly_col = polys[i]->getPolygonsColor();
- 	wiggle.WiggleColor( (temp_poly_col[0]) );
-	polys[i]->setPolygonsColor(temp_poly_col);
+      std::vector<sf::Vector2f> temp_poly_pos = polys[poly_to_change]->getPolygonsPosition();
+      wiggle.WigglePosition( temp_poly_pos[vertex_to_change] );
+      polys[poly_to_change]->setPolygonsPosition(temp_poly_pos);
+
+      std::vector<sf::Color> temp_poly_col = polys[poly_to_change]->getPolygonsColor();
+      wiggle.WiggleColor( (temp_poly_col[0]) );
+      polys[poly_to_change]->setPolygonsColor(temp_poly_col);
 	
-
-
-      }
+      //sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
       
-   
-    }
+      //double loss = poly_manager.getLoss( poly_img,imageIn);
+      // std::cout<< " >> LOSS " << loss << std::endl;
+  
+  
+
+     
+    
   }
   
   return 0;

@@ -1,6 +1,8 @@
 #ifndef polygonmanager_hh
 #define polygonmanager_hh
 
+#include <SFML/Graphics.hpp>
+
 
 class PolygonManager{
 
@@ -18,11 +20,11 @@ public:
 
 public:
   void updateImage();
-  double getLoss();
+  double getLoss(sf::Image,sf::Image);
 
   void captureScreen(sf::Texture);
   void captureOriginal(sf::Image);
-  
+  sf::Image getScreenshot(sf::RenderWindow *window);
 
   
 
