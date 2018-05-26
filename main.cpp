@@ -179,8 +179,9 @@ int main(){
       std::vector<sf::Color> temp_poly_col = polys[poly_to_change]->getPolygonsColor();
       wiggle.WiggleColor( (temp_poly_col[0]) );
       polys[poly_to_change]->setPolygonsColor(temp_poly_col);
-	
-      //sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
+
+      
+      sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
       
       //double loss = poly_manager.getLoss( poly_img,imageIn);
       // std::cout<< " >> LOSS " << loss << std::endl;

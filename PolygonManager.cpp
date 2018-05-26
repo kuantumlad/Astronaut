@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cmath>
 
 
 PolygonManager::PolygonManager(){
@@ -27,10 +28,10 @@ void PolygonManager::captureOriginal(sf::Image temp_org_image ){
 
 sf::Image getScreenshot( sf::RenderWindow *window ){
 
-  // sf::Texture texture;
-  // texture.create(window.getSize().x, window.getSize().y);
-  //texture.update(window);
-  sf::Image screenshot = window->capture(); ///texture.copyToImage();
+  sf::Texture texture;
+  texture.create(window->getSize().x, window->getSize().y);
+  texture.update(*window);
+  sf::Image screenshot = texture.copyToImage();
 
   return screenshot;
 }
