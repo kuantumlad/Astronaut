@@ -10,9 +10,11 @@ class Wiggler {
   ~Wiggler();
 
 public:
-  int min_lim;
-  int max_lim;
-  void SetWigglerPositionLimts(int, int);
+  int min_lim_x;
+  int max_lim_x;
+  int min_lim_y;
+  int max_lim_y;
+  void SetWigglerPositionLimts(sf::RenderWindow *window);
   void WigglePosition(sf::Vector2f &temp_pos);
   void WiggleColor(sf::Color &temp_col);
 

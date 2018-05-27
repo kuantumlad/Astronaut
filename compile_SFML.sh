@@ -10,7 +10,7 @@ g++ -c main.cpp Polygons.cpp Wiggler.cpp PolygonManager.cpp -std=gnu++11 -I/usr/
 #cd ../linker/
 echo "Linking..."
 echo " "
-g++ main.o Polygons.o PolygonManager.o Wiggler.o -o sfml-app -I/usr/local/Cellar/SFML/2.4.2/include/SFML -L/usr/local/Cellar/SFML/2.4.2/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+g++ -o sfml-app main.o Polygons.o Wiggler.o PolygonManager.o  -I/usr/local/Cellar/SFML/2.4.2/include/SFML -L/usr/local/Cellar/SFML/2.4.2/lib -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 #mv sfml-app ../
 echo "Executing..."

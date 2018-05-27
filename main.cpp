@@ -20,11 +20,13 @@ int main(){
   sf::Image imageOriginal;
   sf::Texture textureIn;
   sf::Texture textureOg;
+  int pos_or_col = 0;
 
-  if( imageIn.loadFromFile("buzz.jpg") ){
+  if( imageIn.loadFromFile("hello_world.png") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
+    
   }
-  if( imageOriginal.loadFromFile("buzz.jpg") ){
+  if( imageOriginal.loadFromFile("hello_world.png") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
   }
  
@@ -55,97 +57,31 @@ int main(){
   window.setPosition(window_pos);
   window3.setPosition(window3_pos);
 
-  std::vector<sf::VertexArray*> triangles;
-  std::vector<Polygons *> polys;
+  std::vector<int> poly_pos;
+  std::vector<int> poly_clr;
 
-  Wiggler wiggle;
   PolygonManager poly_manager;
+  /* GET ORIGINAL IMAGE SIZE */
+  poly_manager.getOriginalSize(imageIn);  
+  /* INIT POLYGONS */
+  int npolys_to_make = 100;
+  std::string color_choice = "avg";
+  std::vector<Polygons *> polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
+  std::vector<Polygons *> good_polys = polys;
+  std::vector<int> avg_col = poly_manager.getAverageImgColor(imageIn);
+    
+  Wiggler wiggle;
+  wiggle.SetWigglerPositionLimts(&window3);
   
-  /* generate secret number between 1 and 10: */
+  /* VECTOR FOR POLYGONS TO EXCLUDE FROM CHANGING */
+  std::vector<int> exclude_pos;
+  std::vector<int> exclude_color;
 
-  double x = 0.0;
-  double y = 0.0;
-  double alpha = 0.0;
-  
-  int n_triangles = 100;
-  std::vector<sf::Vector2f> pos;
-  std::vector<sf::Color> col;
-  for( int i = 0; i < n_triangles; i++ ){
-    x = rand() % (int)rendX;
-    y = rand() % (int)rendX;
-    sf::Vector2f pos_0(x, y);
-    x = rand() % (int)rendX;
-    y = rand() % (int)rendX;
-    sf::Vector2f pos_1(x, y);
-    x = rand() % (int)rendX;
-    y = rand() % (int)rendX;
-    sf::Vector2f pos_2(x, y);
-
-    alpha = rand() % 255;
-    sf::Color col_0(10,100,200,alpha);
-    alpha = rand() % 255;
-    sf::Color col_1(200,200,200,alpha);
-    alpha = rand() % 255;
-    sf::Color col_2(50,50,50,alpha);
-
-    pos.push_back(pos_0);
-    pos.push_back(pos_1);
-    pos.push_back(pos_2);
-
-    col.push_back(col_0);
-    col.push_back(col_1);
-    col.push_back(col_2);
-    polys.push_back( new Polygons( pos, col, 3 ) );
-
-    pos.clear();
-    col.clear();
-  }
-
-  ////////////////////////////////////////////////////////////////////////////
-  //CALCULATE THE LOSS
-  sf::Vector2u windowSize = window3.getSize();
-  sf::Texture texture;
-  texture.create(windowSize.x, windowSize.y);
-  texture.update(window3);
-  sf::Image screenshot = texture.copyToImage();
-  
-  double temploss = 0;
-  for( int i = 0; i < windowSize.x; i++ ){
-    for( int j = 0; j < windowSize.y; j++ ){
-      sf::Color screenshot_pixel = screenshot.getPixel(i,j);
-      sf::Color original_pixel = imageIn.getPixel(i,j);
-
-      int red = (int)screenshot_pixel.r;
-      int blue = (int)screenshot_pixel.b;
-      int green = (int)screenshot_pixel.g;      
-      int alpha = (int)screenshot_pixel.a;
-
-      int og_red = (int)original_pixel.r;
-      int og_blue = (int)original_pixel.b;
-      int og_green = (int)original_pixel.g;      
-      int og_alpha = (int)original_pixel.a;
-
-      int delta_red = pow( red - og_red, 2);
-      int delta_blue = pow( blue - og_blue, 2);
-      int delta_green = pow( green - og_green, 2);
-      int delta_alpha = pow( alpha - og_alpha, 2);
-      double pixel_chi = (delta_red + delta_blue + delta_green + delta_alpha)/(256.0*256.0*16.0);
-      
-      temploss = temploss + pixel_chi;
-      //std::cout << " >> " << temploss << std::endl;
-    }
-  }
-  ////////////////////////////////////////////////////////////////////////////
-
-
-  
-
-  
-  
   ////////////////////////////////////////////////////////
   //DISPLAY BOTH ORIGINAL AND EDITED IMAGE  
-
+  double loss = 0, previous_loss = 0;
   std::vector<  std::vector<Polygons *> > img_config;
+  int counter = 0, batch = 0;
   while (window.isOpen() ){
     sf::Event event;
     while( window.pollEvent(event) ){
@@ -161,34 +97,58 @@ int main(){
       
       window3.clear(sf::Color::Black);
        for( int i = 0; i < polys.size(); i++ ){
-	window3.draw( polys[i]->vertex_array );     
+	window3.draw( good_polys[i]->vertex_array );     
       }
      
       window3.display();
+      /* SET LOSS */     
+      if( counter == 0 ){
+	sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
+	previous_loss = -poly_manager.getLoss( poly_img, imageIn);
+      }
+
 
       //CHOOSE POLYGON TO CHANGE
-      int poly_to_change = rand() % polys.size();
+      //int poly_to_change = rand() % polys.size();
       int vertex_to_change = rand() % 3;
-
+      pos_or_col = rand() % 2; // 0 CHANGES POSITION WHILE 1 CHANGES COLOR
+      
+      int poly_to_change_pos = rand() % polys.size(); //poly_manager.getRandomPolygonToChange(0,100,exclude_pos);
+      int poly_to_change_color = rand() % polys.size();// poly_manager.getRandomPolygonToChange(0,100,exclude_color);
+      
       //std::cout<< " >> CHANGING POLYGON " << poly_to_change << " VERTEX " << vertex_to_change <<std::endl;
-
-      std::vector<sf::Vector2f> temp_poly_pos = polys[poly_to_change]->getPolygonsPosition();
-      wiggle.WigglePosition( temp_poly_pos[vertex_to_change] );
-      polys[poly_to_change]->setPolygonsPosition(temp_poly_pos);
-
-      std::vector<sf::Color> temp_poly_col = polys[poly_to_change]->getPolygonsColor();
-      wiggle.WiggleColor( (temp_poly_col[0]) );
-      polys[poly_to_change]->setPolygonsColor(temp_poly_col);
-
+      if( pos_or_col == 0 ){
+	//std::cout<<" >> CHANGING POSITION " << std::endl;
+	std::vector<sf::Vector2f> temp_poly_pos = polys[poly_to_change_pos]->getPolygonsPosition();
+	wiggle.WigglePosition( temp_poly_pos[vertex_to_change] );
+	polys[poly_to_change_pos]->setPolygonsPosition(temp_poly_pos);
+      }
+      else if( pos_or_col == 1 ){
+	//std::cout<< " >> CHANGING COLOR " << std::endl;
+	std::vector<sf::Color> temp_poly_col = polys[poly_to_change_pos]->getPolygonsColor();
+	wiggle.WiggleColor( (temp_poly_col[vertex_to_change]) );
+	polys[poly_to_change_pos]->setPolygonsColor(temp_poly_col);
+      }
       
-      sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
-      
-      //double loss = poly_manager.getLoss( poly_img,imageIn);
-      // std::cout<< " >> LOSS " << loss << std::endl;
-  
-  
+      //if( counter % 50 == 0 ){
+      sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
+      loss = -poly_manager.getLoss( poly_img, imageIn);
+      std::cout<< " >> ITERATIONS " << counter << " LOSS " << loss << " PREVIOUS LOSS " << previous_loss << std::endl;
+      //std::cout<< " >> ITERATIONS " << batch << " LOSS " << loss << " PREVIOUS LOSS " << previous_loss << std::endl;
 
-     
+      if( loss > previous_loss ){
+	previous_loss = loss;	
+	std::cout << " >> LOSS IMPROVED " << previous_loss << std::endl;
+	std::cout << " >> POLYGON " << poly_to_change_pos << " IMPROVED LOSS SCORE " << std::endl;
+	std::vector<Polygons *> temp_polys = polys;
+	polys = temp_polys;
+	good_polys = temp_polys;
+	//	batch++;
+	//}
+	//counter = 0;
+      }
+      counter++;
+
     
   }
   
