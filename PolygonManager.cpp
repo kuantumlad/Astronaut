@@ -75,7 +75,8 @@ std::vector<int> PolygonManager::getAverageImgColor(sf::Image image){
 }
 
 
-std::vector<Polygons *> PolygonManager::initPolygons(int npolys, sf::Image image, std::string clr_choice){
+//std::vector<Polygons *> PolygonManager::initPolygons(int npolys, sf::Image image, std::string clr_choice){
+std::vector<Polygons> PolygonManager::initPolygons(int npolys, sf::Image image, std::string clr_choice){
 
   /* INIT POLYGON PROPERTIES */
   double x = 0.0;
@@ -85,7 +86,8 @@ std::vector<Polygons *> PolygonManager::initPolygons(int npolys, sf::Image image
   double rendY = windowSize.y;
   double delx = 0.0;
   double dely = 0.0;
-  std::vector<Polygons *> polys;
+  //std::vector<Polygons *> polys;
+  std::vector<Polygons> polys;
 
   /* GET AVERAGE PICTURE IMAGE TO SET TRIANGLES TO */
   std::vector<int> avg_col = {0,0,0};
@@ -133,7 +135,8 @@ std::vector<Polygons *> PolygonManager::initPolygons(int npolys, sf::Image image
     col.push_back(col_0);
     col.push_back(col_1);
     col.push_back(col_2);
-    polys.push_back( new Polygons( pos, col, 3 ) );
+    //polys.push_back( new Polygons( pos, col, 3 ) );
+    polys.push_back( Polygons( pos, col, 3 ) );
     
     pos.clear();
     col.clear();

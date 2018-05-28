@@ -33,7 +33,8 @@ public:
   int getRandomPolygonToChange(int,int, std::vector<int> );
   
 
-  std::vector<Polygons *> initPolygons(int,sf::Image,std::string clr_choice);
+  //std::vector<Polygons *> initPolygons(int,sf::Image,std::string clr_choice);
+  std::vector<Polygons> initPolygons(int,sf::Image,std::string clr_choice);
   std::vector<int> getAverageImgColor(sf::Image image);
   std::vector<int> setPolyColor(std::string);
   
