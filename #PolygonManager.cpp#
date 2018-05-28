@@ -45,7 +45,7 @@ std::vector<int> PolygonManager::setPolyColor(std::string init_color ){
 }
 
 std::vector<int> PolygonManager::getAverageImgColor(sf::Image image){
-
+ 
   std::vector<int> avg_color = {0,0,0};
 
   int tot_red = 0, tot_blue = 0, tot_green = 0;

@@ -66,9 +66,9 @@ int main(){
   good_poly_manager.getOriginalSize(imageIn);  
  
  /* INIT POLYGONS */
-  int npolys_to_make = 150;
+  int npolys_to_make = 50;
   std::string color_choice = "avg";
-  //  std::vector<Polygons *> polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
+  //std::vector<Polygons *> polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   //std::vector<Polygons *> good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   std::vector<Polygons > polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   std::vector<Polygons > good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
@@ -76,7 +76,6 @@ int main(){
   Wiggler wiggle;
   wiggle.SetWigglerPositionLimts(&window3);
   
-
   ////////////////////////////////////////////////////////
   //DISPLAY BOTH ORIGINAL AND EDITED IMAGE  
   double loss = 0, previous_loss = 0;
@@ -98,84 +97,89 @@ int main(){
      
       /* SET LOSS */     
       if( counter == 0 ){
+	window3.clear(sf::Color::Black);
+	for( int i = 0; i < polys.size(); i++ ){
+	  window3.draw( polys[i].vertex_array );     
+	}      
+	//window3.display();
+	
 	sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
 	previous_loss = -poly_manager.getLoss( poly_img, imageIn);
       }
+      //      std::cout << " >> BEGIN EVENT " << std::endl;
 
+      sf::Image poly_img_b  =  poly_manager.getScreenshot(&window3);      
+      double check_loss_1 = -poly_manager.getLoss( poly_img_b, imageIn);
+      //std::cout<< " >> ITERATIONS " << counter << " LOSS BEFORE CHANGE " << check_loss_1 << " PREVIOUS LOSS " << previous_loss << std::endl;
 
-      //CHOOSE POLYGON TO CHANGE
+      
+      //CHOOSE POLYGON TO CHANG
+      // 0 CHANGES POSITION WHILE 1 CHANGES COLORE
       int vertex_to_change = rand() % 3;
-      pos_or_col = rand() % 2; // 0 CHANGES POSITION WHILE 1 CHANGES COLOR
+      pos_or_col = rand() % 2; 
       
       int poly_to_change_pos = rand() % polys.size(); 
-      int poly_to_change_color = rand() % polys.size();
+      int poly_to_change_col = rand() % polys.size();
       
-      std::cout<< " >> CHANGING POLYGON " << poly_to_change_pos << " VERTEX " << vertex_to_change <<std::endl;
+      //std::cout<< " >> CHANGING POLYGON " << poly_to_change_pos << " VERTEX " << vertex_to_change <<std::endl;
       if( pos_or_col == 0 ){
-	std::cout<<" >> CHANGING POSITION " << std::endl;
+	//std::cout<<" >> CHANGING POSITION " << std::endl;
 	std::vector<sf::Vector2f> temp_poly_pos = polys[poly_to_change_pos].getPolygonsPosition();
 	wiggle.WigglePosition( temp_poly_pos[vertex_to_change] );
 	polys[poly_to_change_pos].setPolygonsPosition(temp_poly_pos);
       }
       else if( pos_or_col == 1 ){
-	std::cout<< " >> CHANGING COLOR " << std::endl;
-	std::vector<sf::Color> temp_poly_col = polys[poly_to_change_pos].getPolygonsColor();
+	//std::cout<< " >> CHANGING COLOR " << std::endl;
+	std::vector<sf::Color> temp_poly_col = polys[poly_to_change_col].getPolygonsColor();
 	wiggle.WiggleColor( (temp_poly_col[vertex_to_change]) );
-	polys[poly_to_change_pos].setPolygonsColor(temp_poly_col);
+	polys[poly_to_change_col].setPolygonsColor(temp_poly_col);
       }
+
+      window3.clear(sf::Color::Black);
+      for( int i = 0; i < polys.size(); i++ ){
+	window3.draw( polys[i].vertex_array );     
+      }      
+      //window3.display();
       
       sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
       loss = -poly_manager.getLoss( poly_img, imageIn);
-      std::cout<< " >> ITERATIONS " << counter << " LOSS " << loss << " PREVIOUS LOSS " << previous_loss << std::endl;
+      ///std::cout<< " >> ITERATIONS " << counter << " LOSS " << loss << " PREVIOUS LOSS " << previous_loss << std::endl;
 
+      if( counter % 1000 == 0 ){
+	std::cout << " >> ITERATION " << counter << " CURRENT LOSS " << loss << " LOSS TO BEAT " << previous_loss << std::endl;
+      }
+
+      
       if( loss > previous_loss ){
 	previous_loss = loss;	
-	std::cout << " >> LOSS IMPROVED " << previous_loss << std::endl;
-	std::cout << " >> POLYGON " << poly_to_change_pos << " IMPROVED LOSS SCORE " << std::endl;
-	std::vector<Polygons> temp_polys = polys;
-	polys = temp_polys;
-	good_polys = temp_polys;
+	//std::cout << " >> LOSS IMPROVED " << previous_loss << std::endl;
+	//std::cout << " >> POLYGON " << poly_to_change_pos << " IMPROVED LOSS SCORE " << std::endl;
+	good_polys = polys;
       }
       else{
-	//	std::cout << " >> SETTING BACK TO GOOD POLYGON SET " << std::endl;
+	//std::cout << " >> SETTING BACK TO GOOD POLYGON SET " << std::endl;
 	polys = good_polys;
-
-	//for( int i = 0; i < good_polys.size(); i++ ){
-	//  polys[i]->setPolygonsPosition( good_polys[i]->getPolygonsPosition() );
-	//  polys[i]->setPolygonsColor( good_polys[i]->getPolygonsColor() );
-
-	//}
-	if (poly_to_change_pos == 50 ){
-	int k = 50;
-	int test_1x = good_polys[k].getPolygonsPosition()[0].x;
-	int test_1y = good_polys[k].getPolygonsPosition()[0].y;
-	int test_2x = good_polys[k].getPolygonsPosition()[0].x;
-	int test_2y = good_polys[k].getPolygonsPosition()[0].y;
-	int test_3x = good_polys[k].getPolygonsPosition()[0].x;
-	int test_3y = good_polys[k].getPolygonsPosition()[0].y;
-
-	int t1x = polys[k].getPolygonsPosition()[0].x;
-	int t1y = polys[k].getPolygonsPosition()[0].y;
-	int t2x = polys[k].getPolygonsPosition()[0].x;
-	int t2y = polys[k].getPolygonsPosition()[0].y;
-	int t3x = polys[k].getPolygonsPosition()[0].x;
-	int t3y = polys[k].getPolygonsPosition()[0].y;
+	window3.clear(sf::Color::Black);
+	for( int i = 0; i < polys.size(); i++ ){
+	  window3.draw( polys[i].vertex_array );     
+	}      
+	sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
+	double check_loss = -poly_manager.getLoss( poly_img, imageIn);
 	
-	//std::cout << " >> SHOULDNT BE CHANGING UNESS LOSS IMPROVED " << std::endl;
-	std::cout << " >> " << test_1x << " " << test_1y << " " << test_2x << " " << test_2y << " " << test_3x << " " << test_3y << std::endl;
-	std::cout << " >> TEST POLY " << t1x << " " << t1y << " " << t2x << " " << t2y << " " << t3x << " " << t3y << std::endl;
-	}
+	//std::cout<< " >> RESET POLYS TO GOOD POLYS CHECKING LOSS " << check_loss << std::endl;
+      
       }
+  
+      //std::cout << " END OF EVENT " << std::endl;
       counter++;
 
       ////////////////////////////////////////////////
-      //CHECK TO SEE IF POLYGONS ARE CHANGING WHEN THEY SHUOLDNT 
+      //DRAW ONLY GOOD SET OF POLYGONS
       
       window3.clear(sf::Color::Black);
        for( int i = 0; i < polys.size(); i++ ){
 	window3.draw( good_polys[i].vertex_array );     
-      }
-     
+      }     
       window3.display();
     
   }
