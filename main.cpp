@@ -22,11 +22,11 @@ int main(){
   sf::Texture textureOg;
   int pos_or_col = 0;
 
-  if( imageIn.loadFromFile("black_triangle.jpg") ){
+  if( imageIn.loadFromFile("buzz.jpg") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
     
   }
-  if( imageOriginal.loadFromFile("black_triangle.jpg") ){
+  if( imageOriginal.loadFromFile("buzz.jpg") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
   }
  
@@ -66,7 +66,7 @@ int main(){
   good_poly_manager.getOriginalSize(imageIn);  
  
  /* INIT POLYGONS */
-  int npolys_to_make = 50;
+  int npolys_to_make = 250;
   std::string color_choice = "avg";
   //std::vector<Polygons *> polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   //std::vector<Polygons *> good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
