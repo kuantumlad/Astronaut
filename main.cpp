@@ -236,8 +236,8 @@ int main(){
       //for( int i = 0; i < polys.size(); i++ ){
 	 //window3.draw( good_polys[i].vertex_array );
 	 // }
-       for( int i = 0; i < conv_poly.size(); i++ ){
-	 window3.draw( conv_poly[i].convex_shape );     
+       for( int i = 0; i < good_conv_poly.size(); i++ ){
+	 window3.draw( good_conv_poly[i].convex_shape );     
        }
 
        
