@@ -147,6 +147,80 @@ std::vector<Polygons> PolygonManager::initPolygons(int npolys, sf::Image image, 
 }
 
 
+std::vector<ConvexPolygons> PolygonManager::initConvexPolygons(int n_polys, sf::Image image, std::string clr_choice , int n_vertices){
+
+  double x = 0.0;
+  double y = 0.0;
+  double alpha = 0.0;
+  double rendX = windowSize.x; //FIX RENDERING AREA 
+  double rendY = windowSize.y;
+  double delx = 0.0;
+  double dely = 0.0;
+  
+  std::vector<ConvexPolygons> conv_poly;
+
+  std::vector<int> avg_col = {0,0,0};  
+  if(clr_choice == "avg"){
+    avg_col = getAverageImgColor(image);
+  }
+  else{
+    avg_col = setPolyColor(clr_choice);
+  }
+  int r = avg_col[0];
+  int g = avg_col[1];
+  int b = avg_col[2];
+  
+
+  for( int i = 0; i  < n_polys; i++ ){
+    std::map<int, sf::Vector2f> temp_conv;
+        
+    delx = rand() % 1 - 5;
+    dely = rand() % 1 - 5;
+    
+    x = (rand() % (int)rendX) + delx;
+    y = (rand() % (int)rendY) + dely;
+    
+    alpha = rand() % 255;
+    sf::Color col(r,g,b,alpha);
+
+    sf::Vector2f pos;
+    pos.x = x;
+    pos.y = y;
+
+    int v_rand = rand() % n_vertices + 3;
+
+    std::cout<< " >> CENTRAL POS " << pos.x << " " << pos.y << std::endl;
+
+    double tot_deg = 360.0;
+    double deg_to_rotate = tot_deg/(double)n_vertices;
+    
+    for( int v = 0; v <= v_rand; v++ ){
+
+      double dist = rand() % 10 + 25;
+      double ang = v*deg_to_rotate;
+      double rad = ang * 3.141592658 / 180.0;
+      double x_v  = dist*cos(rad);
+      double y_v  = dist*sin(rad);
+
+      std::cout << " >> v" << v << " r " << dist << " x " << x_v << " y " << y_v << " ang " << ang << std::endl;
+      
+      sf::Vector2f v_pos;
+      v_pos.x = x_v;
+      v_pos.y = y_v;
+      temp_conv[v] = v_pos;       
+    }
+    
+    conv_poly.push_back( ConvexPolygons(temp_conv, pos, col, v_rand + 1) );
+    temp_conv.clear();
+
+  }
+  
+
+  return conv_poly;
+  
+  
+}					 
+
 void PolygonManager::getOriginalSize(sf::Image temp_org_image ){
 
   windowSize = temp_org_image.getSize();

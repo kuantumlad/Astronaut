@@ -6,6 +6,16 @@
 
 Polygons::Polygons(){
 
+  /*
+  Polygon.AddPoint(0, -50,  sf::Color(255, 0, 0),     sf::Color(0, 128, 128));
+  Polygon.AddPoint(50, 0,   sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
+  Polygon.AddPoint(50, 50,  sf::Color(255, 170, 170), sf::Color(0, 128, 128));
+  Polygon.AddPoint(0, 100,  sf::Color(255, 255, 255), sf::Color(0, 128, 128));
+  Polygon.AddPoint(-50, 50, sf::Color(255, 170, 170), sf::Color(0, 128, 128));
+  Polygon.AddPoint(-50, 0,  sf::Color(255, 85, 85),   sf::Color(0, 128, 128));
+  */
+
+  
 }
 
 
@@ -25,6 +35,14 @@ Polygons::Polygons(std::vector<sf::Vector2f> pos, std::vector<sf::Color> col, in
   setPolygonsPosition(pos);
   setPolygonsColor(col);
   
+}
+
+
+Polygons::Polygons( int vertices ){
+
+  convex_shape.setPointCount(vertices);
+
+
 }
 
 void Polygons::setPolygonsColor( std::vector<sf::Color> col ){
@@ -54,6 +72,7 @@ void Polygons::setPolygonsPosition( std::vector<sf::Vector2f> pos ){
 }
 
 
+
 std::vector<sf::Vector2f> Polygons::getPolygonsPosition(){
 
   return vertex_pos;
@@ -63,6 +82,18 @@ std::vector<sf::Vector2f> Polygons::getPolygonsPosition(){
 std::vector<sf::Color> Polygons::getPolygonsColor(){
 
   return vertex_col;
+
+}
+
+void Polygons::setConvexPolygonsColor( std::vector<sf::Color> col ){
+
+
+
+}
+
+
+void Polygons::setConvexPolygonsPosition( std::vector<sf::Vector2f> pos){
+
 
 }
 

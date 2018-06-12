@@ -7,6 +7,7 @@
 #include <time.h> 
 
 #include "Polygons.hh"
+#include "ConvexPolygons.hh"
 #include "PolygonManager.hh"
 #include "Wiggler.hh"
 
@@ -53,6 +54,7 @@ int main(){
   //SET SIZE OF WINDOW TO THAT OF IMAGE DIMENSIONS
   sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Original");
   sf::RenderWindow window3(sf::VideoMode(windowX,windowY,32),"Rendered");  
+  //sf::RenderWindow window3(sf::VideoMode(500,500,32),"Rendered");  
   window.setPosition(window_pos);
   window3.setPosition(window3_pos);
 
@@ -72,6 +74,9 @@ int main(){
   //std::vector<Polygons *> good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   std::vector<Polygons > polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   std::vector<Polygons > good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
+
+  std::vector<ConvexPolygons> conv_poly = poly_manager.initConvexPolygons(50, imageIn, color_choice, 7);
+  std::vector<ConvexPolygons> good_conv_poly = good_poly_manager.initConvexPolygons(50, imageIn, color_choice, 7);
     
   Wiggler wiggle;
   wiggle.SetWigglerPositionLimts(&window3);
@@ -98,9 +103,12 @@ int main(){
       /* SET LOSS */     
       if( counter == 0 ){
 	window3.clear(sf::Color::Black);
-	for( int i = 0; i < polys.size(); i++ ){
-	  window3.draw( polys[i].vertex_array );     
-	}      
+	//for( int i = 0; i < polys.size(); i++ ){
+	  //window3.draw( polys[i].vertex_array );     
+	//}
+	for( int i = 0; i < conv_poly.size(); i++ ){
+	  window3.draw( conv_poly[i].convex_shape );     
+	}
 	//window3.display();
 	
 	sf::Image poly_img  =  poly_manager.getScreenshot(&window3);
@@ -135,34 +143,81 @@ int main(){
 	polys[poly_to_change_col].setPolygonsColor(temp_poly_col);
       }
 
-      window3.clear(sf::Color::Black);
-      for( int i = 0; i < polys.size(); i++ ){
-	window3.draw( polys[i].vertex_array );     
-      }      
+      //window3.clear(sf::Color::Black);
+      //for( int i = 0; i < polys.size(); i++ ){
+	//window3.draw( polys[i].vertex_array );     
+      //}      
       //window3.display();
+      
+      //sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
+      //loss = -poly_manager.getLoss( poly_img, imageIn);
+      ///std::cout<< " >> ITERATIONS " << counter << " LOSS " << loss << " PREVIOUS LOSS " << previous_loss << std::endl;
+
+      //if( counter % 1000 == 0 ){
+      //std::cout << " >> ITERATION " << counter << " CURRENT LOSS " << loss << " LOSS TO BEAT " << previous_loss << std::endl;
+      //}
+
+
+      /*
+	TESTING CONVEX SHAPE WIGGLES
+      */
+      int con_to_change_pos = rand() % conv_poly.size();
+      int v_to_change_pos = rand() % conv_poly[con_to_change_pos].getNumVertices();
+      
+      std::cout << " WIGGLE CONVEX SHAPE " << con_to_change_pos << " VERTEX " << v_to_change_pos << std::endl;
+
+      if( pos_or_col == 0 ){
+	sf::Vector2f conv_point = conv_poly[con_to_change_pos].getConvexPolygonsPoint(v_to_change_pos);
+	std::cout << " >> BEFORE WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;	
+	wiggle.WigglePosition(conv_point);
+	std::cout << " >> AFTER  WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;
+      }
+      else{
+	sf::Color temp_conv_color = conv_poly[con_to_change_pos].getConvexPolygonsColor();
+	//wiggle.WiggleColor(temp_conv_color);
+      }
+	
+      window3.clear(sf::Color::Black);
+      for( int i = 0; i < conv_poly.size(); i++ ){
+	window3.draw( conv_poly[i].convex_shape );     
+      }
       
       sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
       loss = -poly_manager.getLoss( poly_img, imageIn);
       ///std::cout<< " >> ITERATIONS " << counter << " LOSS " << loss << " PREVIOUS LOSS " << previous_loss << std::endl;
-
+      
       if( counter % 1000 == 0 ){
 	std::cout << " >> ITERATION " << counter << " CURRENT LOSS " << loss << " LOSS TO BEAT " << previous_loss << std::endl;
       }
 
+      /*
+
+	DONT TESTING HERE 
+
+       */
+
+      
       
       if( loss > previous_loss ){
 	previous_loss = loss;	
 	//std::cout << " >> LOSS IMPROVED " << previous_loss << std::endl;
 	//std::cout << " >> POLYGON " << poly_to_change_pos << " IMPROVED LOSS SCORE " << std::endl;
 	good_polys = polys;
+	good_conv_poly = conv_poly;
       }
       else{
 	//std::cout << " >> SETTING BACK TO GOOD POLYGON SET " << std::endl;
 	polys = good_polys;
+	conv_poly = good_conv_poly;
 	window3.clear(sf::Color::Black);
-	for( int i = 0; i < polys.size(); i++ ){
-	  window3.draw( polys[i].vertex_array );     
+	//for( int i = 0; i < polys.size(); i++ ){
+	  //window3.draw( polys[i].vertex_array );     
+	  //window3.draw( conv_poly[i].convex_shape );
+	//}
+	for( int i = 0; i < conv_poly.size(); i++ ){
+	  window3.draw( conv_poly[i].convex_shape );
 	}      
+
 	sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
 	double check_loss = -poly_manager.getLoss( poly_img, imageIn);
 	
@@ -175,16 +230,25 @@ int main(){
 
       ////////////////////////////////////////////////
       //DRAW ONLY GOOD SET OF POLYGONS
-      
+
+
       window3.clear(sf::Color::Black);
-       for( int i = 0; i < polys.size(); i++ ){
-	window3.draw( good_polys[i].vertex_array );     
-      }     
+      //for( int i = 0; i < polys.size(); i++ ){
+	 //window3.draw( good_polys[i].vertex_array );
+	 // }
+       for( int i = 0; i < conv_poly.size(); i++ ){
+	 window3.draw( conv_poly[i].convex_shape );     
+       }
+
+       
       window3.display();
     
   }
-  
+
   return 0;
+
+  
 }
+
 
 

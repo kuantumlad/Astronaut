@@ -1,0 +1,75 @@
+#include "ConvexPolygons.hh"
+#include <SFML/Graphics.hpp>  
+#include <vector>
+#include <iostream>
+
+
+ConvexPolygons::ConvexPolygons(){
+
+
+  
+}
+
+
+ConvexPolygons::~ConvexPolygons(){
+
+}
+
+
+ConvexPolygons::ConvexPolygons(std::map< int, sf::Vector2f > con_map, sf::Vector2f pos, sf::Color col, int vertices ){
+
+  convex_shape.setPointCount(vertices);
+  
+  for (std::map<int,sf::Vector2f >::iterator it=con_map.begin(); it!=con_map.end(); ++it){
+    std::cout << " >> IN CP " << it->first << " " << it->second.x << " " << it->second.y << std::endl;
+    convex_shape.setPoint( it->first, it->second ); 
+  }
+
+  convex_shape.setFillColor(col);
+  convex_shape.setPosition(pos);  
+  
+}
+
+
+
+void ConvexPolygons::setConvexPolygonsColor( sf::Color col ){
+
+  convex_shape.setFillColor(col);
+  
+}
+
+
+void ConvexPolygons::setConvexPolygonsPosition( sf::Vector2f pos ){
+
+  convex_shape.setPosition(pos);
+  
+}
+
+
+void ConvexPolygons::setConvexPolygonsPoint( int vertex, sf::Vector2f pos ){
+
+  convex_shape.setPoint(vertex, pos);
+  
+}
+
+
+sf::Vector2f ConvexPolygons::getConvexPolygonsPosition(){
+
+  return convex_shape.getPosition();
+  
+
+}
+
+sf::Vector2f ConvexPolygons::getConvexPolygonsPoint(int vertex){
+
+  return convex_shape.getPoint(vertex);
+  
+
+}
+
+sf::Color ConvexPolygons::getConvexPolygonsColor(){
+
+  return convex_shape.getFillColor();
+
+}
+
