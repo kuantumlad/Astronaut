@@ -174,7 +174,7 @@ int main(){
       }
       else{
 	sf::Color temp_conv_color = conv_poly[con_to_change_pos].getConvexPolygonsColor();
-	//wiggle.WiggleColor(temp_conv_color);
+	wiggle.WiggleColor(temp_conv_color);
       }
 	
       window3.clear(sf::Color::Black);
