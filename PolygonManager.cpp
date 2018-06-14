@@ -272,6 +272,44 @@ double PolygonManager::getLoss(sf::Image screenshot, sf::Image imageIn){
 
 }
 
+bool PolygonManager::checkConvexShape(ConvexPolygons temp_poly ){
+
+  int n_points = temp_poly.getNumVertices();
+  int n_shift = 1;
+  int nn_shift = 2;
+  double cross_product_sign = 0;
+  bool is_convex = true;
+  std::cout << " >> TOTAL NUMBER OF POINTS " << n_points << std::endl;
+  if( n_points > 3 ){
+    for( int i = 0; i < n_points; i++ ){
+      
+      sf::Vector2f cp = temp_poly.getConvexPolygonsPoint(i);
+      
+      if( i == n_points - 2 ){
+	n_shift = 1;
+	nn_shift = -i;
+      }
+      std::cout << " >> CREATING VECTORS FOR POINTS " << i << " " << i + n_shift << " " << i+nn_shift << std::endl;
+
+      sf::Vector2f nnp = temp_poly.getConvexPolygonsPoint(i+n_shift);
+      sf::Vector2f np = temp_poly.getConvexPolygonsPoint(i+nn_shift);
+      
+      sf::Vector2f v_AB = cp - np;
+      sf::Vector2f v_BC = nnp - np;
+      
+      cross_product_sign = v_AB.x * v_BC.y - v_AB.y *v_BC.x;
+      std::cout << " >> " << cross_product_sign << std::endl;
+      
+      if( cross_product_sign < 0 ){
+	is_convex = false;
+      }
+
+      if( i == n_points - 2 ) break;
+    }
+  }
+  return is_convex;
+}
+
 int PolygonManager::getRandomPolygonToChange(int min, int max, std::vector<int> exclude ){
 
   int range = max - min - exclude.size();

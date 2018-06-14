@@ -17,6 +17,7 @@ public:
   void SetWigglerPositionLimts(sf::RenderWindow *window);
   void WigglePosition(sf::Vector2f &temp_pos);
   void WiggleColor(sf::Color &temp_col);
+  
 
 };
 

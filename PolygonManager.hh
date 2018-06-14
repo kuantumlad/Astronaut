@@ -32,7 +32,7 @@ public:
   sf::Image getScreenshot(sf::RenderWindow *window);
 
   int getRandomPolygonToChange(int,int, std::vector<int> );
-  
+  bool checkConvexShape(ConvexPolygons);
 
   //std::vector<Polygons *> initPolygons(int,sf::Image,std::string clr_choice);
   std::vector<Polygons> initPolygons(int,sf::Image,std::string clr_choice);

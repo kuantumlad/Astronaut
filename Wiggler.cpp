@@ -49,7 +49,7 @@ void Wiggler::WigglePosition(sf::Vector2f &temp_pos){
   int pos_y = (temp_pos.y);
 
   int delx = (rand() % 5)-2; //3, 1
-  int dely = (rand() % 5)-2;
+  int dely = (rand() % 5)-2; 
 
   temp_pos.x = temp_pos.x + delx;
   temp_pos.y = temp_pos.y + dely;
@@ -69,6 +69,8 @@ void Wiggler::WigglePosition(sf::Vector2f &temp_pos){
   }
 
 }
+
+
 
 
 void Wiggler::WiggleColor(sf::Color &temp_col){
