@@ -75,8 +75,8 @@ int main(){
   std::vector<Polygons > polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   std::vector<Polygons > good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
 
-  std::vector<ConvexPolygons> conv_poly = poly_manager.initConvexPolygons(1, imageIn, color_choice, 7);
-  std::vector<ConvexPolygons> good_conv_poly = good_poly_manager.initConvexPolygons(1, imageIn, color_choice, 7);
+  std::vector<ConvexPolygons> conv_poly = poly_manager.initConvexPolygons(150, imageIn, color_choice, 7);
+  std::vector<ConvexPolygons> good_conv_poly = good_poly_manager.initConvexPolygons(150, imageIn, color_choice, 7);
     
   Wiggler wiggle;
   wiggle.SetWigglerPositionLimts(&window3);
@@ -132,13 +132,13 @@ int main(){
       //std::cout<< " >> CHANGING POLYGON " << poly_to_change_pos << " VERTEX " << vertex_to_change <<std::endl;
       if( pos_or_col == 0 ){
 	//std::cout<<" >> CHANGING POSITION " << std::endl;
-	std::vector<sf::Vector2f> temp_poly_pos = polys[poly_to_change_pos].getPolygonsPosition();
+	//std::vector<sf::Vector2f> temp_poly_pos = polys[poly_to_change_pos].getPolygonsPosition();
 	//wiggle.WigglePosition( temp_poly_pos[vertex_to_change] );
 	//polys[poly_to_change_pos].setPolygonsPosition(temp_poly_pos);
       }
       else if( pos_or_col == 1 ){
 	//std::cout<< " >> CHANGING COLOR " << std::endl;
-	std::vector<sf::Color> temp_poly_col = polys[poly_to_change_col].getPolygonsColor();
+	//std::vector<sf::Color> temp_poly_col = polys[poly_to_change_col].getPolygonsColor();
 	//wiggle.WiggleColor( (temp_poly_col[vertex_to_change]) );
 	//polys[poly_to_change_col].setPolygonsColor(temp_poly_col);
       }
@@ -170,13 +170,13 @@ int main(){
 	sf::Vector2f conv_point = conv_poly[con_to_change_pos].getConvexPolygonsPoint(v_to_change_pos);
 	//std::cout << " >> BEFORE WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;	
 	wiggle.WigglePosition(conv_point);
-	//conv_poly[con_to_change_pos].setConvexPolygonsPoint(v_to_change_pos,conv_point);
+	conv_poly[con_to_change_pos].setConvexPolygonsPoint(v_to_change_pos,conv_point);
 	//std::cout << " >> AFTER  WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;
       }
       else{
 	sf::Color temp_conv_color = conv_poly[con_to_change_pos].getConvexPolygonsColor();
 	wiggle.WiggleColor(temp_conv_color);
-	//conv_poly[con_to_change_pos].setConvexPolygonsColor(temp_conv_color);
+	conv_poly[con_to_change_pos].setConvexPolygonsColor(temp_conv_color);
       }
 	
       // std::cout << " >> CHECKING IF SHAPE IS CONVEX " << std::endl;
