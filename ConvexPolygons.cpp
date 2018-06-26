@@ -77,3 +77,27 @@ int ConvexPolygons::getNumVertices(){
 
   return convex_shape.getPointCount();
 }
+
+
+int ConvexPolygons::getFurthestVertex(){
+
+  int n_vertices = getNumVertices();
+  sf::Vector2f center = convex_shape.getOrigin();
+  std::cout<< " >> CENTER ? " << center.x << " " << center.y << std::endl;
+  double max_dist = 0.0;
+  int max_index = -1;
+  for( int i = 0; i < n_vertices; i++ ){
+    
+    double x = getConvexPolygonsPoint(i).x;
+    double y = getConvexPolygonsPoint(i).y;
+
+    double dist = sqrt( (x-center.x)*(x-center.x) + (y - center.y)*(y - center.y));
+    std::cout << " >> DIST " << dist << " MAX DIST " << max_dist << std::endl;
+    if( dist > max_dist ){
+      max_dist = dist;
+      max_index = i;
+    }
+  }
+
+  return max_index;
+}

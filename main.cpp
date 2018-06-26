@@ -75,8 +75,8 @@ int main(){
   std::vector<Polygons > polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
   std::vector<Polygons > good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
 
-  std::vector<ConvexPolygons> conv_poly = poly_manager.initConvexPolygons(150, imageIn, color_choice, 7);
-  std::vector<ConvexPolygons> good_conv_poly = good_poly_manager.initConvexPolygons(150, imageIn, color_choice, 7);
+  std::vector<ConvexPolygons> conv_poly = poly_manager.initConvexPolygons(1, imageIn, color_choice, 7);
+  std::vector<ConvexPolygons> good_conv_poly = good_poly_manager.initConvexPolygons(1, imageIn, color_choice, 7);
     
   Wiggler wiggle;
   wiggle.SetWigglerPositionLimts(&window3);
@@ -164,12 +164,13 @@ int main(){
       int con_to_change_pos = rand() % conv_poly.size();
       int v_to_change_pos = rand() % conv_poly[con_to_change_pos].getNumVertices();
       
-      //std::cout << " WIGGLE CONVEX SHAPE " << con_to_change_pos << " VERTEX " << v_to_change_pos << std::endl;
+      std::cout << " WIGGLE CONVEX SHAPE " << con_to_change_pos << " VERTEX " << v_to_change_pos << std::endl;
 
       if( pos_or_col == 0 ){
 	sf::Vector2f conv_point = conv_poly[con_to_change_pos].getConvexPolygonsPoint(v_to_change_pos);
 	//std::cout << " >> BEFORE WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;	
-	wiggle.WigglePosition(conv_point);
+	//wiggle.WigglePosition(conv_point);
+	wiggle.WiggleConvexPolygon(conv_poly[con_to_change_pos], conv_point);
 	conv_poly[con_to_change_pos].setConvexPolygonsPoint(v_to_change_pos,conv_point);
 	//std::cout << " >> AFTER  WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;
       }

@@ -70,6 +70,65 @@ void Wiggler::WigglePosition(sf::Vector2f &temp_pos){
 
 }
 
+void Wiggler::WiggleConvexPolygon(ConvexPolygons conv_poly, sf::Vector2f &temp_pos){
+
+ //std::cout << " >> WIGGLE POS " << (temp_pos.x) << " " << (temp_pos.y) << std::endl;
+  int pos_x = (temp_pos.x);
+  int pos_y = (temp_pos.y);
+
+  int delx = (rand() % 5)-2; //3, 1
+  int dely = (rand() % 5)-2; 
+
+  temp_pos.x = temp_pos.x + delx;
+  temp_pos.y = temp_pos.y + dely;
+
+  //std::cout << " >> NEW POS " << temp_pos.x << " "  << temp_pos.y << std::endl;
+  if( temp_pos.x <= min_lim_x ){
+    temp_pos.x = min_lim_x + 1 ;
+  }
+  if( temp_pos.y <= min_lim_y ){
+    temp_pos.y = min_lim_y + 1;
+  }
+  if( temp_pos.x >= max_lim_x ){
+    temp_pos.x = max_lim_x - 1;
+  }
+  if( temp_pos.y >= max_lim_y ){
+    temp_pos.y = max_lim_y - 1;
+  }
+
+  /////////////////////////////////
+  //CHECK IS ANY SIDES ARE CONCAVE
+  //IF IT IS FALSE SET THE BAD POINT
+  //EQUAL DISTANCE FROM CENTER AS THE FURTHEST 
+  //POINT
+  std::cout << " >> CHECKING IF CONVX " << std::endl;
+  std::vector<int> result =  poly_mang.checkConvexShape(conv_poly);
+  std::cout << " SIZE OF RESULT VECTOR " << result.size() << std::endl;
+  int check_convex = result[0];
+  int check_vertex = result[1];
+  if( check_convex == 0 ){
+    std::cout << " FIXING POINT " << check_vertex << std::endl;
+    int furthest_vertex = conv_poly.getFurthestVertex();
+    sf::Vector2f far_point = conv_poly.getConvexPolygonsPoint(furthest_vertex);
+    temp_pos.x = far_point.x + delx;
+    temp_pos.y = far_point.y + dely;
+    
+    if( temp_pos.x <= min_lim_x ){
+      temp_pos.x = min_lim_x + 1 ;
+    }
+    if( temp_pos.y <= min_lim_y ){
+      temp_pos.y = min_lim_y + 1;
+    }
+    if( temp_pos.x >= max_lim_x ){
+      temp_pos.x = max_lim_x - 1;
+    }
+    if( temp_pos.y >= max_lim_y ){
+      temp_pos.y = max_lim_y - 1;
+    }
+    
+   }
+
+}
 
 
 

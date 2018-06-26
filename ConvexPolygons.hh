@@ -21,7 +21,8 @@ public:
   void setConvexPolygonsColor( sf::Color );
   void setConvexPolygonsPosition( sf::Vector2f );
   void setConvexPolygonsPoint( int, sf::Vector2f );
-    
+  int  getFurthestVertex();
+
   sf::Vector2f getConvexPolygonsPosition();
   sf::Color getConvexPolygonsColor();
   sf::Vector2f getConvexPolygonsPoint(int);

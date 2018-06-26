@@ -272,11 +272,15 @@ double PolygonManager::getLoss(sf::Image screenshot, sf::Image imageIn){
 
 }
 
-bool PolygonManager::checkConvexShape(ConvexPolygons temp_poly ){
+std::vector<int> PolygonManager::checkConvexShape(ConvexPolygons temp_poly ){
+  std::vector<int> result; 
+  // FIRST INDEX IS 0 OR 1 - IS CONVEX OR NOT
+  // SECOND INDEX IS THE SIDE THAT IS BAD
 
   int n_points = temp_poly.getNumVertices();
   int n_shift = 1;
   int nn_shift = 2;
+  int bad_vertex = -1;
   double cross_product_sign = 0;
   bool is_convex = true;
   std::cout << " >> TOTAL NUMBER OF POINTS " << n_points << std::endl;
@@ -302,12 +306,18 @@ bool PolygonManager::checkConvexShape(ConvexPolygons temp_poly ){
       
       if( cross_product_sign < 0 ){
 	is_convex = false;
+	bad_vertex = i + n_shift;
+	break;
       }
-
+      std::cout << " NPOINT " << n_points << " " << i << std::endl;
       if( i == n_points - 2 ) break;
     }
   }
-  return is_convex;
+  result.push_back( is_convex );
+  result.push_back(bad_vertex);
+  std::cout << " RESULT " << result[0] << " " << result[1] << std::endl;
+
+  return result;
 }
 
 int PolygonManager::getRandomPolygonToChange(int min, int max, std::vector<int> exclude ){
@@ -332,3 +342,6 @@ void PolygonManager::updateImage(){
 
 
 }
+
+
+
