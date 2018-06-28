@@ -1,5 +1,5 @@
 #ifndef circles_hh
-#define circles
+#define circles_hh
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -8,10 +8,8 @@ class Circles{
 
 public:
   Circles();
-  ~Circles();
-
-
   Circles(sf::Vector2f, sf::Color, float);
+  ~Circles();
 
   sf::CircleShape circle_shape;
   sf::Vector2f circle_pos;

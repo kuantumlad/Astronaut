@@ -21,7 +21,7 @@ ConvexPolygons::ConvexPolygons(std::map< int, sf::Vector2f > con_map, sf::Vector
   convex_shape.setPointCount(vertices);
   
   for (std::map<int,sf::Vector2f >::iterator it=con_map.begin(); it!=con_map.end(); ++it){
-    std::cout << " >> IN CP " << it->first << " " << it->second.x << " " << it->second.y << std::endl;
+    // std::cout << " >> IN CP " << it->first << " " << it->second.x << " " << it->second.y << std::endl;
     convex_shape.setPoint( it->first, it->second ); 
   }
 

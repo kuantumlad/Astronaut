@@ -22,6 +22,7 @@ public:
   void WigglePosition(sf::Vector2f &temp_pos);
   void WiggleColor(sf::Color &temp_col);
   void WiggleConvexPolygon(ConvexPolygons, sf::Vector2f &temp_pos);
+  void WiggleRadius(float &temp);
 
 };
 

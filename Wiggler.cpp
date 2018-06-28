@@ -101,13 +101,13 @@ void Wiggler::WiggleConvexPolygon(ConvexPolygons conv_poly, sf::Vector2f &temp_p
   //IF IT IS FALSE SET THE BAD POINT
   //EQUAL DISTANCE FROM CENTER AS THE FURTHEST 
   //POINT
-  std::cout << " >> CHECKING IF CONVX " << std::endl;
+  //std::cout << " >> CHECKING IF CONVX " << std::endl;
   std::vector<int> result =  poly_mang.checkConvexShape(conv_poly);
-  std::cout << " SIZE OF RESULT VECTOR " << result.size() << std::endl;
+  //std::cout << " SIZE OF RESULT VECTOR " << result.size() << std::endl;
   int check_convex = result[0];
   int check_vertex = result[1];
   if( check_convex == 0 ){
-    std::cout << " FIXING POINT " << check_vertex << std::endl;
+    // std::cout << " FIXING POINT " << check_vertex << std::endl;
     int furthest_vertex = conv_poly.getFurthestVertex();
     sf::Vector2f far_point = conv_poly.getConvexPolygonsPoint(furthest_vertex);
     temp_pos.x = far_point.x + delx;
@@ -130,7 +130,15 @@ void Wiggler::WiggleConvexPolygon(ConvexPolygons conv_poly, sf::Vector2f &temp_p
 
 }
 
+void Wiggler::WiggleRadius(float &temp_rad ){
 
+  temp_rad += rand() % 2 - 1;
+
+  if( temp_rad <= 0 ){
+    temp_rad = 3;
+  }
+
+}
 
 void Wiggler::WiggleColor(sf::Color &temp_col){
 

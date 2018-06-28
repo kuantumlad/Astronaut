@@ -189,7 +189,7 @@ std::vector<ConvexPolygons> PolygonManager::initConvexPolygons(int n_polys, sf::
 
     int v_rand = rand() % n_vertices + 3;
 
-    std::cout<< " >> CENTRAL POS " << pos.x << " " << pos.y << std::endl;
+    //std::cout<< " >> CENTRAL POS " << pos.x << " " << pos.y << std::endl;
 
     double tot_deg = 360.0;
     double deg_to_rotate = tot_deg/(double)n_vertices;
@@ -202,7 +202,7 @@ std::vector<ConvexPolygons> PolygonManager::initConvexPolygons(int n_polys, sf::
       double x_v  = dist*cos(rad);
       double y_v  = dist*sin(rad);
 
-      std::cout << " >> v" << v << " r " << dist << " x " << x_v << " y " << y_v << " ang " << ang << std::endl;
+      // std::cout << " >> v" << v << " r " << dist << " x " << x_v << " y " << y_v << " ang " << ang << std::endl;
       
       sf::Vector2f v_pos;
       v_pos.x = x_v;
@@ -219,7 +219,60 @@ std::vector<ConvexPolygons> PolygonManager::initConvexPolygons(int n_polys, sf::
   return conv_poly;
   
   
-}					 
+}
+
+std::vector<Circles> PolygonManager::initCircles(int n_polys, sf::Image image, std::string clr_choice){
+
+  double x = 0.0;
+  double y = 0.0;
+  double alpha = 0.0;
+  double rendX = windowSize.x; //FIX RENDERING AREA 
+  double rendY = windowSize.y;
+  double delx = 0.0;
+  double dely = 0.0;
+  double max_rad = 50.0;//rendX/4.0;
+  
+  std::vector<Circles> circs;
+
+  std::vector<int> avg_col = {0,0,0};  
+  if(clr_choice == "avg"){
+    avg_col = getAverageImgColor(image);
+  }
+  else{
+    avg_col = setPolyColor(clr_choice);
+  }
+  int r = avg_col[0];
+  int g = avg_col[1];
+  int b = avg_col[2];
+  
+
+  for( int i = 0; i  < n_polys; i++ ){
+        
+    delx = rand() % 1 - 5;
+    dely = rand() % 1 - 5;
+    
+    x = (rand() % (int)rendX);// + delx;
+    y = (rand() % (int)rendY);// + dely;
+    
+    alpha = rand() % 255;
+    sf::Color col(r,g,b,alpha);
+
+    sf::Vector2f pos;
+    pos.x = x;
+    pos.y = y;
+
+    float rad = (float)((rand() % (int)max_rad + 2));
+
+    //std::cout<< " >> CENTRAL POS " << pos.x << " " << pos.y << " RADIUS " << rad << std::endl;
+    
+    circs.push_back( Circles(pos, col, rad) );
+
+  }
+  
+    return circs;
+
+}
+					 
 
 void PolygonManager::getOriginalSize(sf::Image temp_org_image ){
 
