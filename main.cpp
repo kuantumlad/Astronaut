@@ -10,10 +10,13 @@
 #include "ConvexPolygons.hh"
 #include "Circles.hh"
 #include "PolygonManager.hh"
+#include "ImageManager.hh"
 #include "Wiggler.hh"
+#include "HillClimbingScreen.hh"
+
 
 int main(int argc, char* argv[]){
-  //const char* poly_input
+//const char* poly_input
   srand(time(NULL));
   
   ///////////////////////////////////////////
@@ -28,7 +31,7 @@ int main(int argc, char* argv[]){
   std::string cv_type = "CONVPOLY";
   std::string circ_type = "CIRC";
   int mode;
-
+  std::cout << " HERE " << std::endl;
   std::cout << " >> STARTING ANALYSIS FOR " << argv[1] << std::endl;
 
   if( argv[1] == poly_type ){
@@ -41,15 +44,15 @@ int main(int argc, char* argv[]){
     mode = 2;
   }
   
-  if( imageIn.loadFromFile("Mona_Lisa.jpg") ){
+  if( imageIn.loadFromFile("amanda_2.png") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
     
   }
-  if( imageOriginal.loadFromFile("Mona_Lisa.jpg") ){
+  if( imageOriginal.loadFromFile("amanda_2.png") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
   }
 
-  std::string title = "MONA_LISA";
+  std::string title = "AMANDA";
  
   //////////////////////////////////////////
   //APPLY IMAGE TO TEXTURE THEN SPRITE
@@ -57,6 +60,9 @@ int main(int argc, char* argv[]){
   sf::Sprite spriteOg;
   spriteOg.setTexture(textureOg,true);
 
+
+  ////////////////////////////////////////////
+  //WINDOW IMAGE INFORMATION
   sf::Vector2u imageIn_size = imageIn.getSize();
 
   double windowX = imageIn_size.x;
@@ -70,6 +76,7 @@ int main(int argc, char* argv[]){
   
   sf::Vector2i window_pos(global_X, global_Y);
   sf::Vector2i window3_pos(global_X + rendX, global_Y);
+
   ////////////////////////////////////////////////
   //SET SIZE OF WINDOW TO THAT OF IMAGE DIMENSIONS
   sf::RenderWindow window(sf::VideoMode(windowX,windowY,32),"Original");
@@ -111,6 +118,44 @@ int main(int argc, char* argv[]){
   double loss = 0, previous_loss = 0;
 
   int counter = 0, batch = 0;
+
+
+  ////////////////////////////////
+  // TEST IMAGEMANAGER
+  //
+
+  ImageManager img_manager(imageIn);
+  std::vector< sf::Image > image_section = img_manager.splitMainImage(4,4);
+  std::cout << " >> NUMBER OF SCREENS TO CREATE " << image_section.size() << std::endl;
+  std::vector<int> img_sizes = img_manager.getSplitImageSize();
+  std::cout << " IMG SIZE " << img_sizes[3] << std::endl;
+
+  std::vector< sf::RenderWindow* > my_windows;
+  std::vector< HillClimbingScreen* > my_hcs;
+  for(int s = 0; s <16; s++ ){
+
+    my_windows.push_back( new sf::RenderWindow(sf::VideoMode(img_sizes[2], img_sizes[3], 32),"TESTSPLIT"));
+    my_hcs.push_back( new HillClimbingScreen( image_section[s], npolys_to_make, color_choice) );
+  
+  }
+  
+ 
+
+  int screen = 0;
+  while( screen >= 0 ){
+
+  for( int s = 0; s < 16; s++ ){
+   screen = my_hcs[s]->Run( *(my_windows[s]) );
+    std::cout << " screen value " << screen << std::endl;
+  }
+  
+   }
+
+
+
+
+
+
 
  if( mode == 0 ){
     while (window.isOpen() ){
@@ -214,7 +259,8 @@ int main(int argc, char* argv[]){
 	window3.draw( good_polys[i].vertex_array );     
       }
 
-      if( counter % 10000 == 0 ){
+      bool saveimg = false;
+      if( counter % 10000 == 0 && saveimg ){
 	//SAVE PICTURE HERE TO SEE EVOLUTION
 	sf::Image poly_img = poly_manager.getScreenshot(&window3);
 	std::string extension = ".png";

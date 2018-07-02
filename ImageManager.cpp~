@@ -1,0 +1,45 @@
+#include "ImageManager.hh"
+
+#include <SFML/Graphics.hpp>
+
+#include <vector>
+#include <iostream>
+#include <cmath>
+
+
+ImageManager::ImageManager(){
+
+
+}
+
+ImageManager::ImageManager(sf::Image inImage){
+
+  
+  temp_img = inImage;
+  
+
+}
+
+ImageManager::~ImageManager(){
+
+
+}
+
+
+void ImageManager::splitMainImage(int nx_split, int ny_split){
+
+  sf::Vector2u img_size = temp_img.getSize(); 
+
+  int interval_x = (int)img_size.x/nx_split;
+  int interval_y = (int)img_size.y/ny_split;
+
+  std::cout << " >> SPLIT IN X  WITH " << nx_split << " INTERVALS " << std::endl;
+  std::cout << " >> SPLIT IN Y  WITH " << ny_split << " INTERVALS " << std::endl;
+
+  std::cout << " >> INTERVAL X  WITH " << interval_x << std::endl;
+  std::cout << " >> INTERVAL Y  WITH " << interval_y << std::endl;
+
+
+  
+
+}

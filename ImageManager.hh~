@@ -1,0 +1,23 @@
+#ifndef imagemanager_hh
+#define imagemanager_hh
+
+#include <SFML/Graphics.hpp>
+
+class ImageManager{
+
+public:
+  ImageManager();
+  ImageManager(sf::Image);
+  ~ImageManager();
+
+  sf::Image temp_img;
+
+public:
+
+  void splitMainImage(int, int); // MAY RETURN IMAGE ?
+  
+
+
+
+};
+#endif

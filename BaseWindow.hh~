@@ -1,0 +1,12 @@
+#ifndef baseclass_hh
+#define baseclass_hh
+
+#include <SFML/Graphics.hpp>
+
+class BaseClass{
+
+public:
+  virtual int Run( sf::RenderWindow &App) = 0;
+
+};
+#endif
