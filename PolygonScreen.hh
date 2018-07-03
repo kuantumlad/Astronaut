@@ -1,0 +1,54 @@
+#ifndef polygonscreen_hh
+#define polygonscreen_hh
+
+#include <SFML/Graphics.hpp>
+#include "BaseWindow.hh"
+#include "Polygons.hh"
+#include "ConvexPolygons.hh"
+#include "Circles.hh"
+#include "PolygonManager.hh"
+#include "ImageManager.hh"
+#include "Wiggler.hh"
+
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h> 
+
+class PolygonScreen : public BaseWindow{
+
+public:
+  PolygonScreen();
+  ~PolygonScreen();
+  PolygonScreen( sf::Image, int, std::string);
+
+public:
+  virtual int Run(sf::RenderWindow &App);
+
+public:
+  int iteration_counter;
+  sf::Image true_img;
+  double global_loss;
+  
+public:
+  void getImageToCompare(sf::RenderWindow &inWindow);
+  void setWigglerLimits( sf::RenderWindow &tempWindow);
+  void getTrueImage(sf::Image);
+  
+  Wiggler wiggle;
+  PolygonManager poly_manager;
+  PolygonManager good_poly_manager;
+
+  std::vector<Polygons> polys;
+  std::vector<Polygons> good_polys;
+
+  std::vector<ConvexPolygons> conv_poly;
+  std::vector<ConvexPolygons> good_conv_poly;
+
+  std::vector<Circles> circs;
+  std::vector<Circles> good_circs;
+
+};
+#endif

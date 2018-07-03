@@ -13,6 +13,7 @@
 #include "ImageManager.hh"
 #include "Wiggler.hh"
 #include "HillClimbingScreen.hh"
+#include "PolygonScreen.hh"
 
 
 int main(int argc, char* argv[]){
@@ -71,7 +72,7 @@ int main(int argc, char* argv[]){
   double rendY = windowX;
 
   sf::VideoMode desktop = sf::VideoMode::getDesktopMode();;  
-  int global_X = desktop.width/2 - rendX;
+  int global_X = desktop.width/4 - rendX;
   int global_Y = desktop.height/2 - rendY;
   
   sf::Vector2i window_pos(global_X, global_Y);
@@ -95,7 +96,7 @@ int main(int argc, char* argv[]){
   good_poly_manager.getOriginalSize(imageIn);  
  
  /* INIT POLYGONS */
-  int npolys_to_make = 250;
+  int npolys_to_make = 100;
   std::string color_choice = "avg";
  
   /* USE TRIANGLES */
@@ -119,7 +120,6 @@ int main(int argc, char* argv[]){
 
   int counter = 0, batch = 0;
 
-
   ////////////////////////////////
   // TEST IMAGEMANAGER
   //
@@ -131,25 +131,61 @@ int main(int argc, char* argv[]){
   std::cout << " IMG SIZE " << img_sizes[3] << std::endl;
 
   std::vector< sf::RenderWindow* > my_windows;
+  std::vector< sf::RenderWindow* > my_poly_windows;
   std::vector< HillClimbingScreen* > my_hcs;
-  for(int s = 0; s <16; s++ ){
+  std::vector< PolygonScreen* > my_polys;
+  std::vector< sf::Vector2i > my_window_pos;
+  std::vector< sf::Vector2i > my_poly_window_pos;
 
+  int shift_x = img_sizes[2];
+  int shift_y = img_sizes[3];
+  for( int i = 0; i < 4; i++ ){
+    for( int j = 0; j < 4; j++ ){       
+      int pos_x = global_X + i*shift_x;
+      int pos_y = global_Y + j*shift_y + 50; // ADDING 10 TO ACCOUNT FOR THE BAR
+      std::cout << " >> PLACING WINDOW " << pos_x << " " << pos_y << std::endl;
+      sf::Vector2i temp_pos( pos_x, pos_y );
+      my_window_pos.push_back(temp_pos);
+
+      sf::Vector2i temp_pos1( pos_x + 4*shift_x, pos_y);
+      my_poly_window_pos.push_back(temp_pos1);
+
+    }
+  }
+
+
+
+  for(int s = 0; s < 16; s++ ){
     my_windows.push_back( new sf::RenderWindow(sf::VideoMode(img_sizes[2], img_sizes[3], 32),"TESTSPLIT"));
+
+    my_poly_windows.push_back( new sf::RenderWindow(sf::VideoMode(img_sizes[2], img_sizes[3], 32),"POLYGONS"));
+
+    my_windows[s]->setPosition(my_window_pos[s]);
+    my_poly_windows[s]->setPosition(my_poly_window_pos[s]);
+
     my_hcs.push_back( new HillClimbingScreen( image_section[s], npolys_to_make, color_choice) );
-  
+
+    my_polys.push_back( new PolygonScreen( image_section[s], npolys_to_make, color_choice) );
+    my_polys[s]->setWigglerLimits(*my_poly_windows[s]);
+
   }
   
- 
-  int screen = 0;
+
+
+
+  int screen = 1;
+  int poly_screen = 1;
   while( screen >= 0 ){    
     for( int s = 0; s < 16; s++ ){
       screen = my_hcs[s]->Run( *(my_windows[s]) );
-      //    std::cout << " screen value " << screen << std::endl;
+      poly_screen = my_polys[s]->Run( *(my_poly_windows[s] ));
+
+      //std::cout << " screen value " << screen << std::endl;
     }
   }
   
 
- if( mode == 0 ){
+  if( mode == 0 ){
     while (window.isOpen() ){
       sf::Event event;
       while( window.pollEvent(event) ){
@@ -165,8 +201,7 @@ int main(int argc, char* argv[]){
       //CIRCLE SHAPES HERE
       /* SET LOSS */     
       if( counter == 0 ){
-	window3.clear(sf::Color::Black);
-	
+	window3.clear(sf::Color::Black);	
 	for( int i = 0; i < polys.size(); i++ ){
 	  window3.draw( polys[i].vertex_array );     
 	}
