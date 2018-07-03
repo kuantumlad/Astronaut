@@ -140,22 +140,14 @@ int main(int argc, char* argv[]){
   }
   
  
-
   int screen = 0;
-  while( screen >= 0 ){
-
-  for( int s = 0; s < 16; s++ ){
-   screen = my_hcs[s]->Run( *(my_windows[s]) );
-    std::cout << " screen value " << screen << std::endl;
+  while( screen >= 0 ){    
+    for( int s = 0; s < 16; s++ ){
+      screen = my_hcs[s]->Run( *(my_windows[s]) );
+      //    std::cout << " screen value " << screen << std::endl;
+    }
   }
   
-   }
-
-
-
-
-
-
 
  if( mode == 0 ){
     while (window.isOpen() ){

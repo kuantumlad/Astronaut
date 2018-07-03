@@ -84,7 +84,7 @@ sf::Image ImageManager::splitImage(int x_min, int x_max, int y_min, int y_max ){
   for( int i = x_min; i < x_max; i++ ){
     for( int j = y_min; j < y_max; j++ ){
       sf::Color temp_col = temp_img.getPixel(i,j);      
-      split_img.setPixel(i,j,temp_col);       
+      split_img.setPixel(i - x_min, j - y_min, temp_col); // subtract min to position image in window correctly
     }
   }
 
