@@ -44,12 +44,23 @@ std::vector<int> PolygonManager::setPolyColor(std::string init_color ){
   
 }
 
+void PolygonManager::setWindowSize( sf::Vector2u temp_size ){
+
+  windowSize.x = temp_size.x;
+  windowSize.y = temp_size.y ;
+
+  //std::cout << " TRUE WINDOW SIZE IS " << windowSize.x << " " << windowSize.y << std::endl;
+  
+}
+				    
+
 std::vector<int> PolygonManager::getAverageImgColor(sf::Image image){
 
   std::vector<int> avg_color = {0,0,0};
 
   int tot_red = 0, tot_blue = 0, tot_green = 0;
   int counter = 0;
+  //std::cout << " GET AVERAGE COLOR " << windowSize.x << " " << windowSize.y << std::endl;
   for( int i = 0; i < windowSize.x; i++ ){
     for( int j = 0; j < windowSize.y; j++ ){
       sf::Color pixel = image.getPixel(i,j);
@@ -65,6 +76,7 @@ std::vector<int> PolygonManager::getAverageImgColor(sf::Image image){
     }
  }
 
+  std::cout << " >> AVG PIXEL VALUE COUNTER " << counter << std::endl;
   avg_color[0] = tot_red/counter;
   avg_color[1] = tot_blue/counter;
   avg_color[2] = tot_green/counter;
@@ -83,6 +95,9 @@ std::vector<Polygons> PolygonManager::initPolygons(int npolys, sf::Image image, 
   double alpha = 0.0;
   double rendX = windowSize.x; //FIX RENDERING AREA 
   double rendY = windowSize.y;
+
+  //std::cout << " CHECKING INIT POLYGONS SIZE " << rendX << " " << rendY << std::endl;
+  
   double delx = 0.0;
   double dely = 0.0;
   //std::vector<Polygons *> polys;
@@ -96,35 +111,41 @@ std::vector<Polygons> PolygonManager::initPolygons(int npolys, sf::Image image, 
   else{
     avg_col = setPolyColor(clr_choice);
   }
+ 
   int r = avg_col[0];
   int g = avg_col[1];
   int b = avg_col[2];
 
+  //std::cout << " >> INIT COLOR VALUES R " << r << " G " << g << " B " << b << std::endl;
+  
   int n_triangles = npolys;
   std::vector<sf::Vector2f> pos;
   std::vector<sf::Color> col;
   for( int i = 0; i < n_triangles; i++ ){
-    delx = rand() % 101 - 50;
-    dely = rand() % 101 - 50;
+    delx = rand() % 5 - 5;
+    dely = rand() % 5 - 5 ;
     x = (rand() % (int)rendX) + delx;
     y = (rand() % (int)rendY) + dely;
     sf::Vector2f pos_0(x, y);
-    delx = rand() % 101 - 50;
-    dely = rand() % 101 - 50;
+    delx = rand() % 5 - 5;
+    dely = rand() % 5 - 5 ;
     x = (rand() % (int)rendX) + delx;
     y = (rand() % (int)rendY) + dely;
     sf::Vector2f pos_1(x, y);
-    delx = rand() % 101 - 50;
-    dely = rand() % 101 - 50;
+    delx = rand() % 5 - 5 ;
+    dely = rand() % 5 - 5 ;
     x = (rand() % (int)rendX) + delx;
     y = (rand() % (int)rendY) + dely;
     sf::Vector2f pos_2(x, y);
 
     alpha = rand() % 255;
+    //std::cout << " >> ALPHA 1 " << alpha << std::endl;
     sf::Color col_0(r,g,b,alpha);
     alpha = rand() % 255;
+    //std::cout << " >> ALPHA 2 " << alpha << std::endl;
     sf::Color col_1(r,g,b,alpha);
     alpha = rand() % 255;
+    //std::cout << " >> ALPHA 3 " << alpha << std::endl;
     sf::Color col_2(r,g,b,alpha);
 
     pos.push_back(pos_0);
@@ -277,7 +298,7 @@ std::vector<Circles> PolygonManager::initCircles(int n_polys, sf::Image image, s
 void PolygonManager::getOriginalSize(sf::Image temp_org_image ){
 
   windowSize = temp_org_image.getSize();
-
+  //std::cout << " >> ORIGINAL WINDOW SIZE IN POLYGONMANAGER CLASS " << windowSize.x << " " << windowSize.y << std::endl;
 }
 
 

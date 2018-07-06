@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
   std::string cv_type = "CONVPOLY";
   std::string circ_type = "CIRC";
   int mode;
-  std::cout << " HERE " << std::endl;
+
   std::cout << " >> STARTING ANALYSIS FOR " << argv[1] << std::endl;
 
   if( argv[1] == poly_type ){
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]){
   good_poly_manager.getOriginalSize(imageIn);  
  
  /* INIT POLYGONS */
-  int npolys_to_make = 100;
+  int npolys_to_make = 10;
   std::string color_choice = "avg";
  
   /* USE TRIANGLES */
@@ -139,6 +139,7 @@ int main(int argc, char* argv[]){
 
   int shift_x = img_sizes[2];
   int shift_y = img_sizes[3];
+  sf::Vector2u true_window_size( shift_x, shift_y );
   for( int i = 0; i < 4; i++ ){
     for( int j = 0; j < 4; j++ ){       
       int pos_x = global_X + i*shift_x;
@@ -155,28 +156,30 @@ int main(int argc, char* argv[]){
 
 
 
-  for(int s = 0; s < 16; s++ ){
+  for(int s = 0; s < 16 ; s++ ){
+
+    std::cout << " MAKING WINDOW FOR SECTION " << s << std::endl;
     my_windows.push_back( new sf::RenderWindow(sf::VideoMode(img_sizes[2], img_sizes[3], 32),"TESTSPLIT"));
 
+    std::cout << " MAKING WINDOW FOR POLY SECTION " << s << std::endl;
     my_poly_windows.push_back( new sf::RenderWindow(sf::VideoMode(img_sizes[2], img_sizes[3], 32),"POLYGONS"));
 
+    std::cout << " SETTING  WINDOW'S POSITION " << std::endl;
     my_windows[s]->setPosition(my_window_pos[s]);
     my_poly_windows[s]->setPosition(my_poly_window_pos[s]);
-
+   
     my_hcs.push_back( new HillClimbingScreen( image_section[s], npolys_to_make, color_choice) );
-
-    my_polys.push_back( new PolygonScreen( image_section[s], npolys_to_make, color_choice) );
+    std::cout << " MAKING POLYGONS FOR SECTION " << s << std::endl;
+    my_polys.push_back( new PolygonScreen(true_window_size, image_section[s], npolys_to_make, color_choice) );
     my_polys[s]->setWigglerLimits(*my_poly_windows[s]);
 
   }
   
-
-
-
   int screen = 1;
   int poly_screen = 1;
   while( screen >= 0 ){    
     for( int s = 0; s < 16; s++ ){
+      //std::cout << " >> RUN WINDOW SECTION " << s << std::endl;
       screen = my_hcs[s]->Run( *(my_windows[s]) );
       poly_screen = my_polys[s]->Run( *(my_poly_windows[s] ));
 

@@ -23,6 +23,7 @@ public:
   PolygonScreen();
   ~PolygonScreen();
   PolygonScreen( sf::Image, int, std::string);
+  PolygonScreen( sf::Vector2u, sf::Image, int, std::string);
 
 public:
   virtual int Run(sf::RenderWindow &App);
@@ -36,6 +37,7 @@ public:
   void getImageToCompare(sf::RenderWindow &inWindow);
   void setWigglerLimits( sf::RenderWindow &tempWindow);
   void getTrueImage(sf::Image);
+  void setWindowSize(sf::Vector2u);
   
   Wiggler wiggle;
   PolygonManager poly_manager;

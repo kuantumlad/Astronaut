@@ -1,7 +1,5 @@
 #include "BaseWindow.hh"
 #include "PolygonScreen.hh"
-#include "Polygons.hh"
-#include "Circles.hh"
 #include <iostream>
 
 #include <SFML/Graphics.hpp>
@@ -23,19 +21,47 @@ PolygonScreen::PolygonScreen( sf::Image imageIn, int npolys_to_make, std::string
   iteration_counter = 0;
   global_loss = 0.0;
 
+  getTrueImage(imageIn);
+
   poly_manager.getOriginalSize(imageIn);  
   good_poly_manager.getOriginalSize(imageIn);
 
-  polys = poly_manager.initPolygons(npolys_to_make, imageIn,color_choice);
-  good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
+  std::cout << " >> INIT POLYGONS IN POLYGONSCREEN CLASS: " << npolys_to_make << " " << color_choice << std::endl;
+  polys = poly_manager.initPolygons(npolys_to_make, imageIn, color_choice);
+  good_polys = good_poly_manager.initPolygons(npolys_to_make, imageIn, color_choice);
  
+
+}
+
+PolygonScreen::PolygonScreen( sf::Vector2u true_size, sf::Image imageIn, int npolys_to_make, std::string color_choice){
+  
+  iteration_counter = 0;
+  global_loss = 0.0;
+
   getTrueImage(imageIn);
+
+  poly_manager.setWindowSize( true_size);//getOriginalSize(imageIn);  
+  good_poly_manager.setWindowSize( true_size );//good_poly_manager.getOriginalSize(imageIn);
+
+  std::cout << " >> INIT POLYGONS IN POLYGONSCREEN CLASS: " << npolys_to_make << " " << color_choice << std::endl;
+  polys = poly_manager.initPolygons(npolys_to_make, imageIn, color_choice);
+  good_polys = good_poly_manager.initPolygons(npolys_to_make, imageIn, color_choice);
+ 
 
 }
 
 void PolygonScreen::setWigglerLimits( sf::RenderWindow &tempWindow){
 
   wiggle.SetWigglerPositionLimts(&tempWindow);
+
+}
+
+
+void PolygonScreen::setWindowSize( sf::Vector2u temp_size ){
+
+  std::cout << " POLYGONS SCREEN GET WINDOW SIZE " << temp_size.x << " " << temp_size.y << std::endl;
+  poly_manager.setWindowSize( temp_size );
+  good_poly_manager.setWindowSize( temp_size );
 
 }
 
@@ -75,7 +101,9 @@ int PolygonScreen::Run(sf::RenderWindow &App){
   int vertex_to_change = rand() % 3;
   int pos_or_col = rand() % 2; 
   //std::cout << " WIGGLE CIRCLE SHAPE " << change_shape <<  std::endl;
-  
+
+
+  //std::cout << " POS PR COL " << pos_or_col << std::endl;  
   if( pos_or_col == 0 ){
     std::vector<sf::Vector2f> temp_pos = polys[change_shape].getPolygonsPosition();
     //std::cout << " >> BEFORE WIGGLE " << temp_circ_pos.x << " " << temp_circ_pos.y << std::endl;	

@@ -35,11 +35,11 @@ void Wiggler:: SetWigglerPositionLimts(sf::RenderWindow *window){
   min_lim_y = -( window->getSize().y * 0.25);
   max_lim_x = windX + windX*0.25;
   max_lim_y = windY + windY*0.25;
-  /*  std::cout << " >> " << max_lim_x<< std::endl;
+  std::cout << " >> " << max_lim_x<< std::endl;
   std::cout << " >> " << min_lim_x<< std::endl;
   std::cout << " >> " << max_lim_y<< std::endl;
   std::cout << " >> " << min_lim_y<< std::endl;
-  */
+  
 }
 
 void Wiggler::WigglePosition(sf::Vector2f &temp_pos){

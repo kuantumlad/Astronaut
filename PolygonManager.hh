@@ -34,7 +34,7 @@ public:
 
   int getRandomPolygonToChange(int,int, std::vector<int> );
   std::vector<int> checkConvexShape(ConvexPolygons);
-
+  void setWindowSize( sf::Vector2u );
 
   //std::vector<Polygons *> initPolygons(int,sf::Image,std::string clr_choice);
   std::vector<Polygons> initPolygons(int,sf::Image,std::string clr_choice);
