@@ -13,7 +13,7 @@
 Wiggler::Wiggler(){
 
   std::cout << " WIGGLER SET  " << std::endl;
-  srand(time(NULL));
+  srand(time(0));
 
   min_lim_x = 0;//-window->getSize().x * 0.25;
   min_lim_y = 0;//-window->getSize().y * 0.25;
@@ -27,7 +27,7 @@ Wiggler::~Wiggler(){
 
 }
 
-void Wiggler:: SetWigglerPositionLimts(sf::RenderWindow *window){
+void Wiggler::SetWigglerPositionLimts(sf::RenderWindow *window){
 
   int windX = window->getSize().x;
   int windY = window->getSize().y;
@@ -45,26 +45,27 @@ void Wiggler:: SetWigglerPositionLimts(sf::RenderWindow *window){
 void Wiggler::WigglePosition(sf::Vector2f &temp_pos){
 
   //std::cout << " >> WIGGLE POS " << (temp_pos.x) << " " << (temp_pos.y) << std::endl;
-  int pos_x = (temp_pos.x);
-  int pos_y = (temp_pos.y);
+  //int pos_x = (temp_pos.x);
+  //int pos_y = (temp_pos.y);
 
-  int delx = (rand() % 5)-2; //3, 1
-  int dely = (rand() % 5)-2; 
+  int delx = (rand() % 3 - 1 ); //3, 1
+  int dely = (rand() % 3 - 1 ); 
+  //std::cout << " >> " << rand()%3 << " "  << delx << " " << dely << std::endl;
 
   temp_pos.x = temp_pos.x + delx;
   temp_pos.y = temp_pos.y + dely;
 
   //std::cout << " >> NEW POS " << temp_pos.x << " "  << temp_pos.y << std::endl;
-  if( temp_pos.x <= min_lim_x ){
+  if( temp_pos.x < min_lim_x ){
     temp_pos.x = min_lim_x + 1 ;
   }
-  if( temp_pos.y <= min_lim_y ){
+  if( temp_pos.y < min_lim_y ){
     temp_pos.y = min_lim_y + 1;
   }
-  if( temp_pos.x >= max_lim_x ){
+  if( temp_pos.x > max_lim_x ){
     temp_pos.x = max_lim_x - 1;
   }
-  if( temp_pos.y >= max_lim_y ){
+  if( temp_pos.y > max_lim_y ){
     temp_pos.y = max_lim_y - 1;
   }
 
@@ -76,8 +77,8 @@ void Wiggler::WiggleConvexPolygon(ConvexPolygons conv_poly, sf::Vector2f &temp_p
   int pos_x = (temp_pos.x);
   int pos_y = (temp_pos.y);
 
-  int delx = (rand() % 5)-2; //3, 1
-  int dely = (rand() % 5)-2; 
+  int delx = (rand() % 4)-3; //3, 1
+  int dely = (rand() % 4)-3; 
 
   temp_pos.x = temp_pos.x + delx;
   temp_pos.y = temp_pos.y + dely;
@@ -142,10 +143,39 @@ void Wiggler::WiggleRadius(float &temp_rad ){
 
 void Wiggler::WiggleColor(sf::Color &temp_col){
 
-  temp_col.r += rand() % 3 - 1; //CHANGE
-  temp_col.g += rand() % 3 - 1;
-  temp_col.b += rand() % 3 - 1;
-  temp_col.a += rand() % 3 - 1;
+  //std::cout << " >> WIGGLE COLOR " << std::endl;
+  temp_col.r += (rand() % 3 - 1); //CHANGE
+  temp_col.g += (rand() % 3 - 1);
+  temp_col.b += (rand() % 3 - 1);
+  temp_col.a += (rand() % 3 - 1);
+
+  if( temp_col.r < 0 ){
+    temp_col.r = 0;// temp_col.r + 1;
+  }
+  else if( temp_col.r > 255 ){
+    temp_col.r = 255;//temp_col.r - 1;
+  }
+
+  if( temp_col.g < 0 ){
+    temp_col.g = 0;//temp_col.g + 1;
+  }
+  else if( temp_col.b > 255 ){
+    temp_col.b = 255;//temp_col.g - 1;
+  }
+
+  if( temp_col.b < 0 ){
+    temp_col.b = 0;//temp_col.b + 1;
+  }
+  else if( temp_col.b > 255 ){
+    temp_col.b = 255;//temp_col.b - 1;
+  }
+
+  if( temp_col.a < 0 ){
+    temp_col.a = 0;//temp_col.a + 1;
+  }
+  else if( temp_col.a > 255 ){
+    temp_col.a = 255;//temp_col.a - 1;
+  }
   
 
 }

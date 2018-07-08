@@ -77,9 +77,14 @@ sf::Image ImageManager::splitImage(int x_min, int x_max, int y_min, int y_max ){
 
   std::cout << " X MIN " << x_min << " X MAX " << x_max << std::endl;
   std::cout << " Y MIN " << y_min << " Y MAX " << y_max << std::endl;
+  
+  int x_img_dim = x_max - x_min;
+  int y_img_dim = y_max - y_min;
+
+  std::cout << " >> IMAGE SIZE " << x_img_dim << " " << y_img_dim << std::endl; 
 
   sf::Image split_img;
-  split_img.create(x_max,y_max,sf::Color::Black);
+  split_img.create(x_img_dim,y_img_dim,sf::Color::Black);
 
   for( int i = x_min; i < x_max; i++ ){
     for( int j = y_min; j < y_max; j++ ){

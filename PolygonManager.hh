@@ -30,7 +30,7 @@ public:
 
   void captureScreen(sf::Texture);
   void getOriginalSize(sf::Image);
-  sf::Image getScreenshot(sf::RenderWindow *window);
+  sf::Image getScreenshot(sf::RenderWindow &window);
 
   int getRandomPolygonToChange(int,int, std::vector<int> );
   std::vector<int> checkConvexShape(ConvexPolygons);

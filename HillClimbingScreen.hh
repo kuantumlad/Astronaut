@@ -1,14 +1,9 @@
 #ifndef hillclimbingscreen_hh
 #define hillclimbingscreen_hh
 
-#include <SFML/Graphics.hpp>
 #include "BaseWindow.hh"
-#include "Polygons.hh"
-#include "ConvexPolygons.hh"
-#include "Circles.hh"
-#include "PolygonManager.hh"
-#include "ImageManager.hh"
-#include "Wiggler.hh"
+
+#include <SFML/Graphics.hpp>
 
 class HillClimbingScreen : public BaseWindow {
 
@@ -32,21 +27,6 @@ public:
 
   int n_polys;
   std::string init_color;
-  void setInitColorChoice(std::string);
-  void setPolygonChoice(std::string);
-  
-  PolygonManager poly_manager;
-  PolygonManager good_poly_manager;
-
-  std::vector<Polygons> polys;
-  std::vector<Polygons> good_polys;
-
-  std::vector<ConvexPolygons> conv_poly;
-  std::vector<ConvexPolygons> good_conv_poly;
-
-  std::vector<Circles> circs;
-  std::vector<Circles> good_circs;
-
   
 
 };

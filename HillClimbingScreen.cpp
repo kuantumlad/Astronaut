@@ -1,9 +1,6 @@
 #include "BaseWindow.hh"
 #include "HillClimbingScreen.hh"
-#include "Polygons.hh"
-#include "Circles.hh"
 #include <iostream>
-
 
 #include <SFML/Graphics.hpp>
 
@@ -26,11 +23,6 @@ HillClimbingScreen::HillClimbingScreen(sf::Image imageIn, int npolys_to_make, st
   originalTexture.loadFromImage(imageIn);
   originalSprite.setTexture(originalTexture,true);
 
-  poly_manager.getOriginalSize(imageIn);  
-  good_poly_manager.getOriginalSize(imageIn);
-  //std::vector<Polygons > polys = poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
-  //std::vector<Polygons > good_polys = good_poly_manager.initPolygons(npolys_to_make,imageIn,color_choice);
-  
 
 }
 

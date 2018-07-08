@@ -45,22 +45,21 @@ int main(int argc, char* argv[]){
     mode = 2;
   }
   
-  if( imageIn.loadFromFile("Mona_Lisa.jpg") ){
+  if( imageIn.loadFromFile("amanda_2.png") ){
     std::cout << ">> IMAGE LOADED" << std::endl;
     
   }
-  //if( imageOriginal.loadFromFile("Mona_Lisa.jpg") ){
-  //  std::cout << ">> IMAGE LOADED" << std::endl;
-  //}
+  if( imageOriginal.loadFromFile("amanda_2.png") ){
+    std::cout << ">> IMAGE LOADED" << std::endl;
+  }
 
-  std::string title = "MONA_LISA";
-  std::string save_path = "/home/brandon/Documents/projects/Astronaut/pics/" + title;
+  std::string title = "AMANDA";
  
   //////////////////////////////////////////
   //APPLY IMAGE TO TEXTURE THEN SPRITE
-  //textureOg.loadFromImage(imageOriginal);
-  //sf::Sprite spriteOg;
-  //spriteOg.setTexture(textureOg,true);
+  textureOg.loadFromImage(imageOriginal);
+  sf::Sprite spriteOg;
+  spriteOg.setTexture(textureOg,true);
 
 
   ////////////////////////////////////////////
@@ -97,7 +96,7 @@ int main(int argc, char* argv[]){
   //good_poly_manager.getOriginalSize(imageIn);  
  
  /* INIT POLYGONS */
-  int npolys_to_make = 50;
+  int npolys_to_make = 25;
   std::string color_choice = "avg";
  
   /* USE TRIANGLES */
@@ -134,7 +133,7 @@ int main(int argc, char* argv[]){
   std::vector< sf::RenderWindow* > my_windows;
   std::vector< sf::RenderWindow* > my_poly_windows;
   std::vector< HillClimbingScreen* > my_hcs;
-  std::vector< PolygonScreen > my_polys;
+  std::vector< PolygonScreen* > my_polys;
   std::vector< sf::Vector2i > my_window_pos;
   std::vector< sf::Vector2i > my_poly_window_pos;
 
@@ -171,25 +170,18 @@ int main(int argc, char* argv[]){
    
     my_hcs.push_back( new HillClimbingScreen( image_section[s], npolys_to_make, color_choice) );
     std::cout << " MAKING POLYGONS FOR SECTION " << s << std::endl;
-    my_polys.push_back(  PolygonScreen(true_window_size, image_section[s], npolys_to_make, color_choice) );
-    my_polys[s].setWigglerLimits(*my_poly_windows[s]);
-    my_polys[s].setScreenNumber(s);
-    my_polys[s].setSavePath(save_path);
+    my_polys.push_back( new PolygonScreen(true_window_size, image_section[s], npolys_to_make, color_choice) );
+    my_polys[s]->setWigglerLimits(*my_poly_windows[s]);
 
   }
   
   int screen = 1;
   int poly_screen = 1;
   while( screen >= 0 ){    
-    //std::cout << " >> IN SCREEN WHILE LOOP " << std::endl;
     for( int s = 0; s < 16; s++ ){
       //std::cout << " >> RUN WINDOW SECTION " << s << std::endl;
-      //std::cout << " >> ADDRESS OF MY WINDOW " << (my_windows[s]) << std::endl;
-      //if( s == 14 ){
-      
-	screen = my_hcs[s]->Run( *(my_windows[s]) );
-	poly_screen = my_polys[s].Run( *(my_poly_windows[s]) );
-	//}
+      screen = my_hcs[s]->Run( *(my_windows[s]) );
+      poly_screen = my_polys[s]->Run( *(my_poly_windows[s] ));
 
       //std::cout << " screen value " << screen << std::endl;
     }
@@ -222,48 +214,7 @@ int main(int argc, char* argv[]){
 	previous_loss = -poly_manager.getLoss( poly_img, imageIn);
       }
 
-      sf::Image poly_img_b  =  poly_manager.getScreenshot(&window3);      
-      double check_loss_1 = -poly_manager.getLoss( poly_img_b, imageIn);
-      //std::cout<< " >> ITERATIONS " << counter << " LOSS BEFORE CHANGE " << check_loss_1 << " PREVIOUS LOSS " << previous_loss << std::endl;
-
-      int poly_to_change_pos = rand() % polys.size(); 
-      int poly_to_change_col = rand() % polys.size();
-      int change_shape = rand() % npolys_to_make;
-
-      int vertex_to_change = rand() % 3;
-      pos_or_col = rand() % 2; 
-      //std::cout << " WIGGLE CIRCLE SHAPE " << change_shape <<  std::endl;
-
-      if( pos_or_col == 0 ){
-	std::vector<sf::Vector2f> temp_pos = polys[change_shape].getPolygonsPosition();
-	//std::cout << " >> BEFORE WIGGLE " << temp_circ_pos.x << " " << temp_circ_pos.y << std::endl;	
-	wiggle.WigglePosition(temp_pos[vertex_to_change]);	
-	polys[change_shape].setPolygonsPosition(temp_pos);
-	//std::cout << " >> AFTER  WIGGLE " << conv_point.x << " " << conv_point.y << std::endl;
-      }
-      else{
-	std::vector<sf::Color> temp_color = polys[change_shape].getPolygonsColor();
-	wiggle.WiggleColor(temp_color[vertex_to_change]);
-	polys[change_shape].setPolygonsColor(temp_color);
-      }
-	
-      window3.clear(sf::Color::Black);
-      for( int i = 0; i < polys.size(); i++ ){
-	window3.draw( polys[i].vertex_array );     
-      }
-
-      sf::Image poly_img  =  poly_manager.getScreenshot(&window3);      
-      loss = -poly_manager.getLoss( poly_img, imageIn);
-
-      if( counter % 1000 == 0 ){
-	std::cout << " >> ITERATION " << counter << " CURRENT LOSS " << loss << " LOSS TO BEAT " << previous_loss << std::endl;
-      }
-
-
-      if( loss > previous_loss ){
-	previous_loss = loss;	
-	//std::cout << " >> LOSS IMPROVED " << previous_loss << std::endl;
-	//std::cout << " >> POLYGON " << poly_to_change_pos << " IMPROVED LOSS SCORE " << std::endl;
+      sf	//std::cout << " >> POLYGON " << poly_to_change_pos << " IMPROVED LOSS SCORE " << std::endl;
 	//good_polys = polys;
 	//good_conv_poly = conv_poly;
 	good_polys = polys;

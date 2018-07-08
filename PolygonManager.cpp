@@ -6,11 +6,12 @@
 #include <iostream>
 #include <cmath>
 #include <stdlib.h>     /* srand, rand */
+#include <time.h>
 
 PolygonManager::PolygonManager(){
 
   //temploss = 0;
-  srand(time(NULL));
+  srand(time(0));
 
 
 }
@@ -122,20 +123,20 @@ std::vector<Polygons> PolygonManager::initPolygons(int npolys, sf::Image image, 
   std::vector<sf::Vector2f> pos;
   std::vector<sf::Color> col;
   for( int i = 0; i < n_triangles; i++ ){
-    delx = rand() % 5 - 5;
-    dely = rand() % 5 - 5 ;
+    delx = rand() % 5 - 2;
+    dely = rand() % 5 - 2 ;
     x = (rand() % (int)rendX) + delx;
     y = (rand() % (int)rendY) + dely;
     sf::Vector2f pos_0(x, y);
-    delx = rand() % 5 - 5;
-    dely = rand() % 5 - 5 ;
+    delx = rand() % 5 - 2;
+    dely = rand() % 5 - 2 ;
     x = (rand() % (int)rendX) + delx;
     y = (rand() % (int)rendY) + dely;
     sf::Vector2f pos_1(x, y);
-    delx = rand() % 5 - 5 ;
-    dely = rand() % 5 - 5 ;
+    delx = rand() % 5 - 2 ;
+    dely = rand() % 5 - 2 ;
     x = (rand() % (int)rendX) + delx;
-    y = (rand() % (int)rendY) + dely;
+    y = (rand() % (int)rendY) + dely; //IF BREAKS CHANGE TO -1 SHOULD BE OKAY NOW
     sf::Vector2f pos_2(x, y);
 
     alpha = rand() % 255;
@@ -302,11 +303,12 @@ void PolygonManager::getOriginalSize(sf::Image temp_org_image ){
 }
 
 
-sf::Image  PolygonManager::getScreenshot( sf::RenderWindow *window ){
+sf::Image PolygonManager::getScreenshot( sf::RenderWindow &window ){
 
   sf::Texture texture;
-  texture.create(window->getSize().x, window->getSize().y);
-  texture.update(*window);
+  //std::cout << " >> GETTING SCREEN SHOT OF WINDOW WITH DIMENSION " << windowSize.x << " " <<  windowSize.y << std::endl;
+  texture.create(windowSize.x, windowSize.y);
+  texture.update(window);
   sf::Image screenshot = texture.copyToImage();
 
   return screenshot;
