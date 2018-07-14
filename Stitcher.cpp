@@ -1,4 +1,5 @@
 #include "Stitcher.hh"
+
 #include <SFML/Graphics.hpp>
 
 #include <vector>
