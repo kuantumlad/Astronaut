@@ -15,7 +15,7 @@ class ImageEditor{
   void LoadImage(sf::Image);
   sf::Image BlurImage(sf::Image);
   sf::Image SharpenImage(sf::Image);
-  
+  sf::Image EdgeDetection(sf::Image);  
 
 };
 #endif

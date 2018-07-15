@@ -14,6 +14,7 @@
 #include "Wiggler.hh"
 #include "HillClimbingScreen.hh"
 #include "PolygonScreen.hh"
+#include "Stitcher.hh"
 
 
 int main(int argc, char* argv[]){
@@ -123,9 +124,9 @@ int main(int argc, char* argv[]){
 
   ////////////////////////////////
   // TEST IMAGEMANAGER
-  //
+  // THE FINAL CODE IS IN THIS SECTION
 
-  ImageManager img_manager(imageIn);
+  /* ImageManager img_manager(imageIn);
   std::vector< sf::Image > image_section = img_manager.splitMainImage(4,4);
   std::cout << " >> NUMBER OF SCREENS TO CREATE " << image_section.size() << std::endl;
   std::vector<int> img_sizes = img_manager.getSplitImageSize();
@@ -194,7 +195,59 @@ int main(int argc, char* argv[]){
       //std::cout << " screen value " << screen << std::endl;
     }
   }
-  
+*/  
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  ///////////////////////
+  //
+  //
+  // STITCH IMAGES
+  //
+  //
+  /////////////////////
+  /* int i=0;
+  int max_iteration = 3000000;
+  while( i < max_iteration ){
+    //std::cout << " STITCHING IMAGE ITERATION " << i << std::endl;
+    Stitcher stitcher;
+    stitcher.setIterationImage(i);
+    stitcher.initStitchedImage(imageIn);
+
+    if( i < 1000000 ){
+      std::string img_name = "MONA_LISA_";
+      int s_length = std::to_string(i).length();
+      //std::cout << " >> LENGTH OF DIGITS " << s_length << std::endl;
+      std::string s_zeros;
+
+      if( s_length < 7 ){
+	int zero_counter = 0;
+	int digit_difference = 7 - s_length;
+	//std::cout << " >> DIFFERENCE BETWEEN 7 AND NUMBER OF DIGITS " <<  digit_difference << std::endl;
+	while( zero_counter < digit_difference ){
+	  s_zeros = s_zeros + "0";
+	  //std::cout << "  >> ZEROS IN FRONT " << s_zeros << std::endl;
+	  zero_counter++;	
+	}
+      }
+    
+      std::string file_out = img_name + s_zeros + std::to_string(i) + ".png";
+      std::cout << " >>>>> FILE NAME " << file_out << std::endl;
+      sf::Image stitched_image = stitcher.getStitchedImage("/home/brandon/Documents/projects/final_mona_lisa_pics/pics/",4,4);      
+      stitched_image.saveToFile("/home/brandon/Documents/projects/final_mona_lisa_pics/stitched_pics/"+file_out);
+    }
+    else{
+      std::string img_name = "MONA_LISA_";      
+      
+      std::string file_out = img_name + std::to_string(i) + ".png";
+      std::cout << " >>>>> FILE NAME " << file_out << std::endl;
+      sf::Image stitched_image = stitcher.getStitchedImage("/home/brandon/Documents/projects/final_mona_lisa_pics/pics/",4,4);      
+      stitched_image.saveToFile("/home/brandon/Documents/projects/final_mona_lisa_pics/stitched_pics/"+file_out);
+    }
+    i+=10000;
+  }
+  */
+
   /*
   if( mode == 0 ){
     while (window.isOpen() ){
